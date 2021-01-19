@@ -10326,16 +10326,16 @@ Source: &lt;a href="http://www.ck-components.com/14407/pts525_8sept14.pdf/"&gt;h
 </net>
 <net name="I2C_SDA" class="0">
 <segment>
-<wire x1="101.6" y1="76.2" x2="114.3" y2="76.2" width="0.1524" layer="91"/>
-<pinref part="U2" gate="G$1" pin="IO21"/>
-<label x="104.14" y="76.2" size="1.778" layer="95"/>
+<wire x1="101.6" y1="66.04" x2="114.3" y2="66.04" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="IO26"/>
+<label x="104.14" y="66.04" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="I2C_SCL" class="0">
 <segment>
-<wire x1="101.6" y1="73.66" x2="114.3" y2="73.66" width="0.1524" layer="91"/>
-<pinref part="U2" gate="G$1" pin="IO22"/>
-<label x="104.14" y="73.66" size="1.778" layer="95"/>
+<wire x1="101.6" y1="68.58" x2="114.3" y2="68.58" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="IO25"/>
+<label x="104.14" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$49" class="0">
@@ -10344,58 +10344,52 @@ Source: &lt;a href="http://www.ck-components.com/14407/pts525_8sept14.pdf/"&gt;h
 <pinref part="U2" gate="G$1" pin="IO23"/>
 </segment>
 </net>
-<net name="N$50" class="0">
-<segment>
-<wire x1="101.6" y1="68.58" x2="114.3" y2="68.58" width="0.1524" layer="91"/>
-<pinref part="U2" gate="G$1" pin="IO25"/>
-</segment>
-</net>
-<net name="N$51" class="0">
-<segment>
-<wire x1="101.6" y1="66.04" x2="114.3" y2="66.04" width="0.1524" layer="91"/>
-<pinref part="U2" gate="G$1" pin="IO26"/>
-</segment>
-</net>
 <net name="N$52" class="0">
 <segment>
 <wire x1="101.6" y1="63.5" x2="114.3" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="IO27"/>
 </segment>
 </net>
-<net name="N$53" class="0">
+<net name="DIST_XSHUT_A" class="0">
 <segment>
 <wire x1="101.6" y1="60.96" x2="114.3" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="IO32"/>
+<label x="104.14" y="60.96" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$54" class="0">
+<net name="DIST_GPIO1_A" class="0">
 <segment>
 <wire x1="101.6" y1="58.42" x2="114.3" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="IO33"/>
+<label x="104.14" y="58.42" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$57" class="0">
+<net name="DIST_GPIO1_B" class="0">
 <segment>
 <pinref part="U2" gate="G$1" pin="SENSOR_VP"/>
 <wire x1="60.96" y1="99.06" x2="48.26" y2="99.06" width="0.1524" layer="91"/>
+<label x="41.91" y="99.06" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$58" class="0">
+<net name="DIST_XSHUT_B" class="0">
 <segment>
 <pinref part="U2" gate="G$1" pin="SENSOR_VN"/>
 <wire x1="60.96" y1="96.52" x2="48.26" y2="96.52" width="0.1524" layer="91"/>
+<label x="41.91" y="96.52" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$59" class="0">
+<net name="DIST_XSHUT_C" class="0">
 <segment>
 <wire x1="60.96" y1="91.44" x2="48.26" y2="91.44" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="IO34"/>
+<label x="41.91" y="91.44" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$60" class="0">
+<net name="DIST_GPIO1_C" class="0">
 <segment>
 <wire x1="60.96" y1="88.9" x2="48.26" y2="88.9" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="IO35"/>
+<label x="41.91" y="88.9" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="TXD0" class="0">
@@ -10911,20 +10905,15 @@ Source: &lt;a href="http://www.ck-components.com/14407/pts525_8sept14.pdf/"&gt;h
 </net>
 <net name="RTS" class="0">
 <segment>
-<pinref part="R10" gate="G$1" pin="1"/>
-<wire x1="-58.42" y1="22.86" x2="-68.58" y2="22.86" width="0.1524" layer="91"/>
-<pinref part="R10" gate="G$1" pin="2"/>
 <wire x1="-68.58" y1="22.86" x2="-81.28" y2="22.86" width="0.1524" layer="91"/>
-<wire x1="-58.42" y1="22.86" x2="-48.26" y2="22.86" width="0.1524" layer="91"/>
-<pinref part="Q2" gate="G$1" pin="B"/>
-<wire x1="-35.56" y1="22.86" x2="-48.26" y2="22.86" width="0.1524" layer="91"/>
-<junction x="-48.26" y="22.86"/>
 <pinref part="Q3" gate="G$1" pin="E"/>
 <wire x1="-30.48" y1="55.88" x2="-30.48" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="-30.48" y1="50.8" x2="-68.58" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="-68.58" y1="50.8" x2="-68.58" y2="22.86" width="0.1524" layer="91"/>
-<junction x="-68.58" y="22.86"/>
 <label x="-81.28" y="22.86" size="1.778" layer="95"/>
+<pinref part="R10" gate="G$1" pin="1"/>
+<wire x1="-58.42" y1="22.86" x2="-68.58" y2="22.86" width="0.1524" layer="91"/>
+<junction x="-68.58" y="22.86"/>
 </segment>
 <segment>
 <pinref part="U1" gate="G$1" pin="!RTS"/>
@@ -10937,6 +10926,27 @@ Source: &lt;a href="http://www.ck-components.com/14407/pts525_8sept14.pdf/"&gt;h
 <pinref part="D7" gate="G$1" pin="2"/>
 <pinref part="R11" gate="G$1" pin="2"/>
 <wire x1="-27.94" y1="-119.38" x2="-27.94" y2="-121.92" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="R10" gate="G$1" pin="2"/>
+<pinref part="Q2" gate="G$1" pin="B"/>
+<wire x1="-35.56" y1="22.86" x2="-48.26" y2="22.86" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="L" class="0">
+<segment>
+<wire x1="101.6" y1="76.2" x2="114.3" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="IO21"/>
+<label x="104.14" y="76.2" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="LL" class="0">
+<segment>
+<wire x1="101.6" y1="73.66" x2="114.3" y2="73.66" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="IO22"/>
+<label x="104.14" y="73.66" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
