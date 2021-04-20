@@ -13,8 +13,9 @@
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 #include "esp_log.h"
-
+#include <driver/i2c.h>
 #include "vl53l0x.hpp"
+#include <cstring>
 
 #define I2C_SDA_PIN 26
 #define I2C_SCL_PIN 25
@@ -39,14 +40,30 @@ void scan()
     
         if (ret == ESP_OK)
         {
-            printf("Found device at: 0x%2x\n", i);
+            printf("Found device at: 0x%02x\n", i);
         }
     }
+    printf("\n\n");
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
 }
 
 
 void init()
 {
+    i2c_config_t conf;
+    conf.mode = I2C_MODE_MASTER;
+    conf.sda_io_num = I2C_SDA_PIN;
+    conf.scl_io_num = I2C_SCL_PIN;
+    conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.master.clk_speed = 100000;
+    conf.clk_flags = 0;
+
+    esp_err_t err1 = i2c_param_config(I2C_NUM_0, &conf);
+    esp_err_t err2 = i2c_driver_install(I2C_NUM_0, conf.mode, 0, 0, 0);
+
+    printf("I2C inited succesfully %d %d\n", err1, err2);
+
     gpio_config_t io_conf;
     io_conf.intr_type = (gpio_int_type_t)GPIO_PIN_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_OUTPUT;
@@ -58,6 +75,8 @@ void init()
     gpio_set_level(XSHUT_PIN_1, 0);
     gpio_set_level(XSHUT_PIN_2, 0);
     gpio_set_level(XSHUT_PIN_3, 0);
+
+    printf("\n\n");
 }
 
 
@@ -65,24 +84,28 @@ extern "C" void app_main()
 {
     init();
 
-    vl53l0x dist_1(0x29, I2C_SDA_PIN, I2C_SCL_PIN, XSHUT_PIN_1);
-    dist_1.set_addr((0x30 << 1));
+    vl53l0x dist_1(0x01, XSHUT_PIN_1);
+    vl53l0x dist_2(0x02, XSHUT_PIN_2);
+    vl53l0x dist_3(0x03, XSHUT_PIN_3);
 
-    vl53l0x dist_2(0x29, I2C_SDA_PIN, I2C_SCL_PIN, XSHUT_PIN_2);
-    dist_2.set_addr((0x40 << 1));
+    dist_1.start(50);
+    dist_2.start(50);
+    dist_3.start(50);
 
-    vl53l0x dist_3(0x29, I2C_SDA_PIN, I2C_SCL_PIN, XSHUT_PIN_3);
-    dist_3.set_addr((0x50 << 1));
-
-    scan();
+    uint16_t d[3] = {0};
 
     while (1)
     {
-        uint8_t data[3] = {0};
-        dist_1.read_reg(0xC0, data, 3);
-        printf("%x %x %x\n", data[0], data[1], data[2]);
+        d[0] = dist_1.read();
+        d[1] = dist_2.read();
+        d[2] = dist_3.read();
 
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        for (int i = 0; i < 3; i++)
+        {
+            printf("dist %d. %d mm\n", i, d[i]);
+        }
+        printf("\n");
+
+        vTaskDelay(50 / portTICK_PERIOD_MS);
     }
-    
 }
