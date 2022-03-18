@@ -10424,9 +10424,9 @@ Created by Upverter.com</description>
 </net>
 <net name="DIST_XSHUT_A" class="0">
 <segment>
-<wire x1="101.6" y1="60.96" x2="114.3" y2="60.96" width="0.1524" layer="91"/>
-<pinref part="U2" gate="G$1" pin="IO32"/>
-<label x="104.14" y="60.96" size="1.778" layer="95"/>
+<wire x1="101.6" y1="88.9" x2="114.3" y2="88.9" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="IO15"/>
+<label x="104.14" y="88.9" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DIST_GPIO1_A" class="0">
@@ -10443,18 +10443,11 @@ Created by Upverter.com</description>
 <label x="41.91" y="99.06" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="DIST_XSHUT_B" class="0">
-<segment>
-<pinref part="U2" gate="G$1" pin="SENSOR_VN"/>
-<wire x1="60.96" y1="96.52" x2="48.26" y2="96.52" width="0.1524" layer="91"/>
-<label x="41.91" y="96.52" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="DIST_XSHUT_C" class="0">
 <segment>
-<wire x1="60.96" y1="91.44" x2="48.26" y2="91.44" width="0.1524" layer="91"/>
-<pinref part="U2" gate="G$1" pin="IO34"/>
-<label x="41.91" y="91.44" size="1.778" layer="95"/>
+<wire x1="114.3" y1="73.66" x2="101.6" y2="73.66" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="IO22"/>
+<label x="104.14" y="73.66" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="DIST_GPIO1_C" class="0">
@@ -10998,6 +10991,13 @@ Created by Upverter.com</description>
 <wire x1="101.6" y1="81.28" x2="114.3" y2="81.28" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="IO18"/>
 <label x="104.14" y="81.28" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="DIST_XSHUT_B" class="0">
+<segment>
+<wire x1="101.6" y1="71.12" x2="114.3" y2="71.12" width="0.1524" layer="91"/>
+<pinref part="U2" gate="G$1" pin="IO23"/>
+<label x="104.14" y="71.12" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
