@@ -24,7 +24,8 @@
 
 
 extern "C" void app_main() {
-    xTaskCreate(vTaskMotors, "task_code", 1024*2, NULL, 3, NULL);
+    xTaskCreate(vTaskMotors, "task_motors", 1024*2, NULL, 3, NULL);
+    xTaskCreate(vTaskSpeed, "task_speed", 1024*2, NULL, 3, NULL);
     xTaskCreate(vMPU, "task_mpu", 1024*2, NULL, 3, NULL);
     xTaskCreate(vDistSensor, "task_dist", 1024*2, NULL, 3, NULL);
 }
