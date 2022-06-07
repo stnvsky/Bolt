@@ -19,6 +19,19 @@
 
 #include "driver/ledc.h"
 
+#include "rotary_encoder.h"
+
+#define TAG "app"
+
+#define ROT_ENC_A_GPIO      (gpio_num_t)6
+#define ROT_ENC_B_GPIO      (gpio_num_t)11
+
+#define ENABLE_HALF_STEPS false  // Set to true to enable tracking of rotary encoder at half step resolution
+#define RESET_AT          0      // Set to a positive non-zero number to reset the position if this value is exceeded
+#define FLIP_DIRECTION    false  // Set to true to reverse the clockwise/counterclockwise sense
+
+
+
 #define LEDC_HS_TIMER          LEDC_TIMER_0
 #define LEDC_HS_MODE           LEDC_HIGH_SPEED_MODE
 #define LEDC_HS_CH0_GPIO       (21)
@@ -44,6 +57,6 @@
 #define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1))
 
 void vTaskMotors( void * pvParameters );
-
+void vTaskSpeed( void * pvParameters );
 
 #endif // MOTORS_H
