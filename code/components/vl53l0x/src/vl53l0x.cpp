@@ -1,4 +1,8 @@
+#include <hal/gpio_hal.h>
+#include <freertos/FreeRTOS.h>
+//#include <freertos/task.h>
 #include "vl53l0x.hpp"
+#include "../../../main/include/distance.h"
 
 
 vl53l0x::vl53l0x(uint8_t address, gpio_num_t xshut_pin, uint8_t i2c_port)
@@ -12,7 +16,7 @@ vl53l0x::vl53l0x(uint8_t address, gpio_num_t xshut_pin, uint8_t i2c_port)
 
 vl53l0x::~vl53l0x()
 {
-   gpio_set_level(_xshut_pin, 0);
+    gpio_set_level(_xshut_pin, 0);
 }
 
 void vl53l0x::enable()
@@ -30,7 +34,7 @@ void vl53l0x::disable()
    if (enabled)
    {
       enabled = false;
-      gpio_set_level(_xshut_pin, 0);
+       gpio_set_level(_xshut_pin, 0);
    }
 }
 
@@ -76,7 +80,7 @@ void vl53l0x::wait_for_device()
       i2c_master_start(cmd);
       i2c_master_write_byte(cmd, (_address << 1) | I2C_MASTER_WRITE, 1);
       i2c_master_stop(cmd);
-      ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_RATE_MS);
+      ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_PERIOD_MS);
       i2c_cmd_link_delete(cmd);
 
       // timeout after 100 ms
@@ -84,7 +88,7 @@ void vl53l0x::wait_for_device()
       if (time - start_time > 100)
       {
          printf("ERROR - vl53l0x - could not connect to the device\n");
-         gpio_set_level(_xshut_pin, 0);
+          gpio_set_level(_xshut_pin, 0);
          enabled = false;
          break;
       }

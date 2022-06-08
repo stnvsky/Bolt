@@ -18,7 +18,7 @@ static void init()
     printf("I2C inited succesfully %d %d\n", err1, err2);
 
     gpio_config_t io_conf;
-    io_conf.intr_type = (gpio_int_type_t)GPIO_PIN_INTR_DISABLE;
+    io_conf.intr_type = (gpio_int_type_t)GPIO_INTR_DISABLE;
     io_conf.mode = GPIO_MODE_OUTPUT;
     io_conf.pin_bit_mask = (1ULL<<XSHUT_PIN_1) | (1ULL<<XSHUT_PIN_2) | (1ULL<<XSHUT_PIN_3);
     io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
@@ -59,6 +59,6 @@ void vDistSensor( void * pvParameters )
         }
         printf("\n");
 
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }

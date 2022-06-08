@@ -19,8 +19,6 @@
 
 #include "driver/ledc.h"
 
-#include "rotary_encoder.h"
-
 #define TAG "app"
 
 #define ROT_ENC_A_GPIO      (gpio_num_t)6

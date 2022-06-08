@@ -33,6 +33,6 @@ void vMPU( void * pvParameters )
         accelG = mpud::accelGravity(accelRaw, mpud::ACCEL_FS_4G);
         printf ("%f %f %f\n", accelG.x, accelG.y, accelG.z);
 
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }

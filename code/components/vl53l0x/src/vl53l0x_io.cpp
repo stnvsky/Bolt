@@ -11,7 +11,7 @@ esp_err_t vl53l0x::write_reg(uint8_t reg, uint8_t data)
    i2c_master_write_byte(cmd, data, ACK_CHECK_EN);
    i2c_master_stop(cmd);
 
-   esp_err_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_RATE_MS);
+   esp_err_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_PERIOD_MS);
    if (ret != ESP_OK)
    {
       printf("\n\nERROR - write_reg failed\n\n");
@@ -33,7 +33,7 @@ esp_err_t vl53l0x::write_reg(uint8_t reg, uint8_t *data, size_t size)
    i2c_master_write(cmd, data, size, ACK_CHECK_EN);
    i2c_master_stop(cmd);
 
-   esp_err_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_RATE_MS);
+   esp_err_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_PERIOD_MS);
    if (ret != ESP_OK)
    {
       printf("WARNING - write_reg failed\n");
@@ -60,7 +60,7 @@ void vl53l0x::write_reg_16bit(uint8_t reg, uint16_t data)
    i2c_master_write(cmd, _data, 2, ACK_CHECK_EN);
    i2c_master_stop(cmd);
 
-   int8_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_RATE_MS);
+   int8_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_PERIOD_MS);
    if (ret != ESP_OK)
    {
       printf("WARNING - write_reg failed\n");
@@ -87,7 +87,7 @@ void vl53l0x::write_reg_32bit(uint8_t reg, uint32_t data)
    i2c_master_write(cmd, _data, 4, ACK_CHECK_EN);
    i2c_master_stop(cmd);
 
-   int8_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_RATE_MS);
+   int8_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 100 / portTICK_PERIOD_MS);
    if (ret != ESP_OK)
    {
       printf("\n\nERROR - write_reg failed\n\n");
@@ -111,7 +111,7 @@ uint8_t vl53l0x::read_reg(uint8_t reg)
    i2c_master_read_byte(cmd, &data, NACK_VAL);
    i2c_master_stop(cmd);
 
-   esp_err_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 1000 / portTICK_RATE_MS);
+   esp_err_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 1000 / portTICK_PERIOD_MS);
    if (ret != ESP_OK)
    {
       printf("\n\nERROR - read_reg failed\n\n");
@@ -138,7 +138,7 @@ void vl53l0x::read_reg(uint8_t reg, uint8_t *data, size_t size)
    i2c_master_read_byte(cmd, data + size - 1, NACK_VAL);
    i2c_master_stop(cmd);
 
-   esp_err_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 1000 / portTICK_RATE_MS);
+   esp_err_t ret = i2c_master_cmd_begin(_i2c_port, cmd, 1000 / portTICK_PERIOD_MS);
    if (ret != ESP_OK)
    {
       printf("\n\nERROR - read_reg failed\n\n");
