@@ -6,26 +6,17 @@
    software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
    CONDITIONS OF ANY KIND, either express or implied.
 */
-#include <stdio.h>
-#include <cstring>
-#include <stdint.h>
+
 #include <stdlib.h>
+
+#include "freertos/FreeRTOS.h"
 
 #include "motors.h"
 #include "IMU.h"
 #include "distance.h"
 
-#include "sdkconfig.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_system.h"
-#include "esp_spi_flash.h"
-#include "esp_log.h"
-
-
 extern "C" void app_main() {
     xTaskCreate(vTaskMotors, "task_motors", 1024*2, NULL, 3, NULL);
-    xTaskCreate(vTaskSpeed, "task_speed", 1024*2, NULL, 3, NULL);
     xTaskCreate(vMPU, "task_mpu", 1024*2, NULL, 3, NULL);
     xTaskCreate(vDistSensor, "task_dist", 1024*2, NULL, 3, NULL);
 }
