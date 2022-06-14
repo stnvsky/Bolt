@@ -1869,19 +1869,6 @@ Created by Upverter.com</description>
 </package>
 </packages>
 </library>
-<library name="switch">
-<packages>
-<package name="SWITCH">
-<wire x1="-3.175" y1="6.35" x2="3.425" y2="6.35" width="0.127" layer="21"/>
-<wire x1="-3.175" y1="6.35" x2="-3.175" y2="-6.35" width="0.127" layer="21"/>
-<wire x1="-3.175" y1="-6.35" x2="3.425" y2="-6.35" width="0.127" layer="21"/>
-<wire x1="3.425" y1="-6.35" x2="3.425" y2="6.35" width="0.127" layer="21"/>
-<pad name="P$1" x="0" y="4.7" drill="1.7" shape="long"/>
-<pad name="P$2" x="0" y="0" drill="1.7" shape="long"/>
-<pad name="P$3" x="0" y="-4.7" drill="1.7" shape="long"/>
-</package>
-</packages>
-</library>
 </libraries>
 <attributes>
 </attributes>
@@ -2097,14 +2084,14 @@ design rules under a new name.</description>
 <attribute name="MOUSER_PART_NUMBER" value="" x="8.3225" y="78.636" size="1.778" layer="27" display="off"/>
 <attribute name="MOUSER_PRICE-STOCK" value="" x="8.3225" y="78.636" size="1.778" layer="27" display="off"/>
 </element>
-<element name="Q1" library="XT60_YELLOW" package="AMASS_XT60PB-M" value="XT60_YELLOW" x="21.720334375" y="87.294715625" smashed="yes">
-<attribute name="AVAILABILITY" value="Unavailable" x="21.720334375" y="87.294715625" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value=" Power connector; 65A; PIN: 2; Colour: yellow " x="21.720334375" y="87.294715625" size="1.778" layer="27" display="off"/>
-<attribute name="MF" value="Pololu" x="21.720334375" y="87.294715625" size="1.778" layer="27" display="off"/>
-<attribute name="MP" value="XT60 YELLOW" x="21.720334375" y="87.294715625" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="27.308334375" y="81.389215625" size="1.27" layer="25"/>
-<attribute name="PACKAGE" value="None" x="21.720334375" y="87.294715625" size="1.778" layer="27" display="off"/>
-<attribute name="PRICE" value="None" x="21.720334375" y="87.294715625" size="1.778" layer="27" display="off"/>
+<element name="Q1" library="XT60_YELLOW" package="AMASS_XT60PB-M" value="XT60_YELLOW" x="18.970334375" y="87.544715625" smashed="yes">
+<attribute name="AVAILABILITY" value="Unavailable" x="18.970334375" y="87.544715625" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value=" Power connector; 65A; PIN: 2; Colour: yellow " x="18.970334375" y="87.544715625" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="Pololu" x="18.970334375" y="87.544715625" size="1.778" layer="27" display="off"/>
+<attribute name="MP" value="XT60 YELLOW" x="18.970334375" y="87.544715625" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="24.558334375" y="81.639215625" size="1.27" layer="25"/>
+<attribute name="PACKAGE" value="None" x="18.970334375" y="87.544715625" size="1.778" layer="27" display="off"/>
+<attribute name="PRICE" value="None" x="18.970334375" y="87.544715625" size="1.778" layer="27" display="off"/>
 </element>
 <element name="J1" library="10118194-0001LF" package="AMPHENOL_10118194-0001LF" value="10118194-0001LF" x="46.9465" y="44.569" smashed="yes">
 <attribute name="AVAILABILITY" value="Good" x="46.9465" y="44.569" size="1.778" layer="27" display="off"/>
@@ -2332,7 +2319,6 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="8.815" y="55.145" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="U$2" library="lsm6ds33" package="POLOLU_LSM6DS33" value="POLOLU_LSM6DS33" x="21.392" y="81.294" smashed="yes"/>
-<element name="U$3" library="switch" package="SWITCH" value="SWITCH" x="-4.25" y="43.25" smashed="yes"/>
 </elements>
 <signals>
 <signal name="I2C_SDA">
@@ -2706,91 +2692,7 @@ design rules under a new name.</description>
 <signal name="BAT">
 <contactref element="Q1" pad="1"/>
 <contactref element="D8" pad="2"/>
-<wire x1="4.385" y1="79.537" x2="18.120334375" y2="87.294715625" width="0" layer="19" extent="16-16"/>
-</signal>
-<signal name="N$2">
-<contactref element="U$1" pad="GND1"/>
-</signal>
-<signal name="N$3">
-<contactref element="U$1" pad="VIN"/>
-</signal>
-<signal name="N$4">
-<contactref element="U$1" pad="OB1"/>
-</signal>
-<signal name="N$5">
-<contactref element="U$1" pad="OB2"/>
-</signal>
-<signal name="N$6">
-<contactref element="U$1" pad="OA2"/>
-</signal>
-<signal name="N$7">
-<contactref element="U$1" pad="OA1"/>
-</signal>
-<signal name="N$8">
-<contactref element="U$1" pad="AISEN"/>
-</signal>
-<signal name="N$9">
-<contactref element="U$1" pad="BINSEN"/>
-</signal>
-<signal name="N$10">
-<contactref element="U$1" pad="GND2"/>
-</signal>
-<signal name="N$11">
-<contactref element="U$1" pad="VMM"/>
-</signal>
-<signal name="N$12">
-<contactref element="U$1" pad="INB1"/>
-</signal>
-<signal name="N$13">
-<contactref element="U$1" pad="INB2"/>
-</signal>
-<signal name="N$14">
-<contactref element="U$1" pad="INA2"/>
-</signal>
-<signal name="N$15">
-<contactref element="U$1" pad="INA1"/>
-</signal>
-<signal name="N$16">
-<contactref element="U$1" pad="SLP"/>
-</signal>
-<signal name="N$17">
-<contactref element="U$1" pad="FLT"/>
-</signal>
-<signal name="N$18">
-<contactref element="U$2" pad="VIN"/>
-</signal>
-<signal name="N$19">
-<contactref element="U$2" pad="SDA"/>
-</signal>
-<signal name="N$20">
-<contactref element="U$2" pad="SCL"/>
-</signal>
-<signal name="N$21">
-<contactref element="U$2" pad="SDO"/>
-</signal>
-<signal name="N$22">
-<contactref element="U$2" pad="CS"/>
-</signal>
-<signal name="N$23">
-<contactref element="U$2" pad="VDD"/>
-</signal>
-<signal name="N$24">
-<contactref element="U$2" pad="INT1"/>
-</signal>
-<signal name="N$25">
-<contactref element="U$2" pad="INT2"/>
-</signal>
-<signal name="N$26">
-<contactref element="U$2" pad="GND"/>
-</signal>
-<signal name="N$27">
-<contactref element="U$3" pad="P$1"/>
-</signal>
-<signal name="N$29">
-<contactref element="U$3" pad="P$2"/>
-</signal>
-<signal name="N$30">
-<contactref element="U$3" pad="P$3"/>
+<wire x1="4.385" y1="79.537" x2="15.370334375" y2="87.544715625" width="0" layer="19" extent="16-16"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
