@@ -9706,6 +9706,8 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <classes>
 <class number="0" name="default" width="0" drill="0">
 </class>
+<class number="1" name="SPI" width="0" drill="0">
+</class>
 </classes>
 <parts>
 <part name="HALL_A" library="Rembrandt Electronics - JST XH Connectors v1-0" deviceset="JST-XH-06-PIN" device="-LONG-PAD"/>
@@ -9748,10 +9750,6 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <part name="Q3" library="MMSS8050-H-TP" deviceset="MMSS8050-H-TP" device=""/>
 <part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10K"/>
 <part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="10K"/>
-<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2" value="10uF"/>
-<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2" value="0.1uF"/>
-<part name="GND13" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="GND14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2" value="0.1uF"/>
 <part name="C9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2" value="22uF"/>
 <part name="GND15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -9924,18 +9922,11 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <label x="-114.3" y="-5.08" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="MA_2" class="0">
+<net name="MA_1" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="OA2"/>
 <wire x1="-99.06" y1="-15.24" x2="-106.68" y2="-15.24" width="0.1524" layer="91"/>
 <label x="-114.3" y="-15.24" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="MA_1" class="0">
-<segment>
-<pinref part="U$1" gate="G$1" pin="OA1"/>
-<wire x1="-99.06" y1="-20.32" x2="-106.68" y2="-20.32" width="0.1524" layer="91"/>
-<label x="-114.3" y="-20.32" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PWM_IN_B1" class="0">
@@ -9952,13 +9943,6 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <label x="-58.42" y="-10.16" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="PWM_IN_A2" class="0">
-<segment>
-<pinref part="U$1" gate="G$1" pin="INA2"/>
-<wire x1="-68.58" y1="-15.24" x2="-58.42" y2="-15.24" width="0.1524" layer="91"/>
-<label x="-58.42" y="-15.24" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="DRV_SLEEP" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="SLP"/>
@@ -9973,28 +9957,28 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <label x="-58.42" y="-30.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_MOSI" class="0">
+<net name="SPI_MOSI" class="1">
 <segment>
 <pinref part="U$2" gate="G$1" pin="SDA"/>
 <wire x1="-10.16" y1="-22.86" x2="-17.78" y2="-22.86" width="0.1524" layer="91"/>
 <label x="-30.48" y="-22.86" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_CLK" class="0">
+<net name="SPI_CLK" class="1">
 <segment>
 <pinref part="U$2" gate="G$1" pin="SCL"/>
 <wire x1="-10.16" y1="-25.4" x2="-17.78" y2="-25.4" width="0.1524" layer="91"/>
 <label x="-30.48" y="-25.4" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_MISO" class="0">
+<net name="SPI_MISO" class="1">
 <segment>
 <pinref part="U$2" gate="G$1" pin="SDO"/>
 <wire x1="-10.16" y1="-27.94" x2="-17.78" y2="-27.94" width="0.1524" layer="91"/>
 <label x="-30.48" y="-27.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_CS" class="0">
+<net name="SPI_CS" class="1">
 <segment>
 <pinref part="U$2" gate="G$1" pin="CS"/>
 <wire x1="-10.16" y1="-30.48" x2="-17.78" y2="-30.48" width="0.1524" layer="91"/>
@@ -10024,9 +10008,9 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 </net>
 <net name="PWM_IN_A1" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="INA1"/>
-<wire x1="-68.58" y1="-20.32" x2="-58.42" y2="-20.32" width="0.1524" layer="91"/>
-<label x="-58.42" y="-20.32" size="1.778" layer="95"/>
+<pinref part="U$1" gate="G$1" pin="INA2"/>
+<wire x1="-68.58" y1="-15.24" x2="-58.42" y2="-15.24" width="0.1524" layer="91"/>
+<label x="-58.42" y="-15.24" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="V_BAT_IN" class="0">
@@ -10039,6 +10023,20 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <pinref part="D8" gate="G$0" pin="ANODE"/>
 <wire x1="-69.85" y1="86.36" x2="-59.69" y2="86.36" width="0.1524" layer="91"/>
 <label x="-63.5" y="86.36" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="MA_2" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="OA1"/>
+<wire x1="-99.06" y1="-20.32" x2="-106.68" y2="-20.32" width="0.1524" layer="91"/>
+<label x="-114.3" y="-20.32" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="PWM_IN_A2" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="INA1"/>
+<wire x1="-68.58" y1="-20.32" x2="-58.42" y2="-20.32" width="0.1524" layer="91"/>
+<label x="-58.42" y="-20.32" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
@@ -10171,20 +10169,6 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <attribute name="NAME" x="-57.15" y="24.3586" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-57.15" y="19.558" size="1.778" layer="96"/>
 </instance>
-<instance part="C6" gate="G$1" x="-48.26" y="-116.84" smashed="yes">
-<attribute name="NAME" x="-46.736" y="-116.459" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-46.736" y="-121.539" size="1.778" layer="96"/>
-</instance>
-<instance part="C7" gate="G$1" x="-63.5" y="-116.84" smashed="yes">
-<attribute name="NAME" x="-61.976" y="-116.459" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-61.976" y="-121.539" size="1.778" layer="96"/>
-</instance>
-<instance part="GND13" gate="1" x="-48.26" y="-137.16" smashed="yes">
-<attribute name="VALUE" x="-50.8" y="-139.7" size="1.778" layer="96"/>
-</instance>
-<instance part="GND14" gate="1" x="-63.5" y="-137.16" smashed="yes">
-<attribute name="VALUE" x="-66.04" y="-139.7" size="1.778" layer="96"/>
-</instance>
 <instance part="C8" gate="G$1" x="139.7" y="106.68" smashed="yes">
 <attribute name="NAME" x="141.224" y="107.061" size="1.778" layer="95"/>
 <attribute name="VALUE" x="141.224" y="101.981" size="1.778" layer="96"/>
@@ -10258,9 +10242,9 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <nets>
 <net name="HALL_B2" class="0">
 <segment>
-<pinref part="U2" gate="G$1" pin="IO26"/>
-<wire x1="101.6" y1="66.04" x2="114.3" y2="66.04" width="0.1524" layer="91"/>
-<label x="104.14" y="66.04" size="1.778" layer="95"/>
+<pinref part="U2" gate="G$1" pin="IO25"/>
+<wire x1="101.6" y1="68.58" x2="114.3" y2="68.58" width="0.1524" layer="91"/>
+<label x="104.14" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="TXD0" class="0">
@@ -10292,13 +10276,6 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <pinref part="U2" gate="G$1" pin="IO32"/>
 <wire x1="101.6" y1="60.96" x2="114.3" y2="60.96" width="0.1524" layer="91"/>
 <label x="104.14" y="60.96" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="HALL_B1" class="0">
-<segment>
-<pinref part="U2" gate="G$1" pin="IO25"/>
-<wire x1="101.6" y1="68.58" x2="114.3" y2="68.58" width="0.1524" layer="91"/>
-<label x="104.14" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -10358,16 +10335,6 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <wire x1="-76.2" y1="147.32" x2="-76.2" y2="142.24" width="0.1524" layer="91"/>
 <wire x1="-60.96" y1="147.32" x2="-76.2" y2="147.32" width="0.1524" layer="91"/>
 <junction x="-76.2" y="147.32"/>
-</segment>
-<segment>
-<pinref part="C6" gate="G$1" pin="2"/>
-<wire x1="-48.26" y1="-121.92" x2="-48.26" y2="-134.62" width="0.1524" layer="91"/>
-<pinref part="GND13" gate="1" pin="GND"/>
-</segment>
-<segment>
-<pinref part="C7" gate="G$1" pin="2"/>
-<wire x1="-63.5" y1="-121.92" x2="-63.5" y2="-134.62" width="0.1524" layer="91"/>
-<pinref part="GND14" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="C8" gate="G$1" pin="2"/>
@@ -10445,18 +10412,6 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <wire x1="33.02" y1="-48.26" x2="20.32" y2="-48.26" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="-60.96" x2="33.02" y2="-48.26" width="0.1524" layer="91"/>
 <junction x="33.02" y="-48.26"/>
-</segment>
-</net>
-<net name="USB_5V" class="0">
-<segment>
-<wire x1="-63.5" y1="-101.6" x2="-63.5" y2="-114.3" width="0.1524" layer="91"/>
-<pinref part="C7" gate="G$1" pin="1"/>
-<label x="-66.04" y="-101.6" size="1.778" layer="95"/>
-</segment>
-<segment>
-<wire x1="-48.26" y1="-101.6" x2="-48.26" y2="-114.3" width="0.1524" layer="91"/>
-<pinref part="C6" gate="G$1" pin="1"/>
-<label x="-50.8" y="-101.6" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="EXT_5V" class="0">
@@ -10767,28 +10722,28 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <label x="104.14" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_CLK" class="0">
+<net name="SPI_CLK" class="1">
 <segment>
 <pinref part="U2" gate="G$1" pin="IO18"/>
 <wire x1="101.6" y1="81.28" x2="114.3" y2="81.28" width="0.1524" layer="91"/>
 <label x="104.14" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_MISO" class="0">
+<net name="SPI_MISO" class="1">
 <segment>
 <pinref part="U2" gate="G$1" pin="IO19"/>
 <wire x1="101.6" y1="78.74" x2="114.3" y2="78.74" width="0.1524" layer="91"/>
 <label x="104.14" y="78.74" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_CS" class="0">
+<net name="SPI_CS" class="1">
 <segment>
 <pinref part="U2" gate="G$1" pin="IO21"/>
 <wire x1="101.6" y1="76.2" x2="114.3" y2="76.2" width="0.1524" layer="91"/>
 <label x="104.14" y="76.2" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_MOSI" class="0">
+<net name="SPI_MOSI" class="1">
 <segment>
 <pinref part="U2" gate="G$1" pin="IO23"/>
 <wire x1="101.6" y1="71.12" x2="114.3" y2="71.12" width="0.1524" layer="91"/>
@@ -10814,6 +10769,13 @@ DRV8833 pololu dual drive controller, PCB-ready device</description>
 <pinref part="U2" gate="G$1" pin="IO33"/>
 <wire x1="101.6" y1="58.42" x2="114.3" y2="58.42" width="0.1524" layer="91"/>
 <label x="104.14" y="58.42" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="HALL_B1" class="0">
+<segment>
+<pinref part="U2" gate="G$1" pin="IO26"/>
+<wire x1="101.6" y1="66.04" x2="114.3" y2="66.04" width="0.1524" layer="91"/>
+<label x="104.14" y="66.04" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
