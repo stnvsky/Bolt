@@ -11,7 +11,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
-#include "esp_spi_flash.h"
 #include "esp_log.h"
 #include <driver/i2c.h>
 
@@ -54,7 +53,7 @@ extern "C" void app_main()
             i2c_master_start(cmd);
             i2c_master_write_byte(cmd, (i << 1) | I2C_MASTER_WRITE, 1);
             i2c_master_stop(cmd);
-            ret = i2c_master_cmd_begin(I2C_NUM_1, cmd, 100 / portTICK_RATE_MS);
+            ret = i2c_master_cmd_begin(I2C_NUM_1, cmd, 100 / portTICK_PERIOD_MS);
             i2c_cmd_link_delete(cmd);
         
             if (ret == ESP_OK)

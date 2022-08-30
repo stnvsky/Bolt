@@ -2,10 +2,10 @@
 #include "IMU.h"
 
 
-void vMPU( void * pvParameters ) 
+
+void vMPU( void * pvParameters )
 {
-    printf("$ MPU Driver Example: MPU-SPI\n");
-    fflush(stdout);
+    (void)pvParameters;
 
     spi_device_handle_t mpu_spi_handle;
     // Initialize SPI on HSPI host through SPIbus interface:
@@ -20,7 +20,7 @@ void vMPU( void * pvParameters )
         printf("Failed to connect to the MPU, error=%#X\n", err);
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
-    printf("MPU connection successful!");
+    printf("MPU connection successful");
     ESP_ERROR_CHECK(MPU.initialize());  // initialize the chip and set initial configurations
 
     // Reading sensor data
@@ -31,7 +31,7 @@ void vMPU( void * pvParameters )
         // Read
         MPU.acceleration(&accelRaw);  // fetch raw data from the registers
         accelG = mpud::accelGravity(accelRaw, mpud::ACCEL_FS_4G);
-        printf ("%f %f %f\n", accelG.x, accelG.y, accelG.z);
+        printf ("%f %f %f\n", accelG.x, accelG.y, accelG.z - 0.04f);
 
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }

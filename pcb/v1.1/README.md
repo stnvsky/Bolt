@@ -15,5 +15,11 @@ Other pins used for the communication with the integrated flash are prepared to 
 | HALL_1_B | 20 (GPIO 6)  | 10 (GPIO 25)    |
 | HALL_2_B | 19 (GPIO 11) | 11 (GPIO 26)    |
 
+![esp32](https://github.com/stnvsky/Bolt/blob/main/pcb/v1.1/.esp32.png)
 
+
+
+#### IMPORTANT
+
+Flash mode needs to be set to DIO since QIO uses all four pins to send data to the integrated flash. Using QIO will result in getting resets due to watchdog timeouts.
 

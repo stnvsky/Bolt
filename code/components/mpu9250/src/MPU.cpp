@@ -75,13 +75,13 @@ esp_err_t MPU::initialize()
     // set Digital Low Pass Filter to get smoother data
     if (MPU_ERR_CHECK(setDigitalLowPassFilter(DLPF_42HZ))) return err;
 
-        // setup magnetometer
-#ifdef CONFIG_MPU_AK89xx
-    if (MPU_ERR_CHECK(compassInit())) return err;
-#ifdef CONFIG_MPU_AK8963
-    if (MPU_ERR_CHECK(compassSetSensitivity(MAG_SENSITIVITY_0_15_uT))) return err;
-#endif
-#endif
+//    // setup magnetometer
+//#ifdef CONFIG_MPU_AK89xx
+//    if (MPU_ERR_CHECK(compassInit())) return err;
+//#ifdef CONFIG_MPU_AK8963
+//    if (MPU_ERR_CHECK(compassSetSensitivity(MAG_SENSITIVITY_0_15_uT))) return err;
+//#endif
+//#endif
 
     // set sample rate to 100Hz
     if (MPU_ERR_CHECK(setSampleRate(100))) return err;
