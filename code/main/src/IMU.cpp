@@ -7,6 +7,8 @@ void vMPU( void * pvParameters )
 {
     (void)pvParameters;
 
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
+
     spi_device_handle_t mpu_spi_handle;
     // Initialize SPI on HSPI host through SPIbus interface:
     hspi.begin(MOSI, MISO, SCLK);
@@ -25,7 +27,7 @@ void vMPU( void * pvParameters )
 
     // Reading sensor data
     mpud::raw_axes_t accelRaw;   // x, y, z axes as int16
-    mpud::float_axes_t accelG;   // accel axes in (g) gravity format
+   mpud::float_axes_t accelG;   // accel axes in (g) gravity format
 
     while (true) {
         // Read

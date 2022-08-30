@@ -1,5 +1,5 @@
 //
-// Created by szymon on 13.06.22.
+// Created by Szymon Stanik on 13.06.22.
 //
 
 #ifndef BOLT_MOTORS_DRIVER_H
@@ -9,7 +9,6 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
-//#include "esp_spi_flash.h"
 #include "esp_log.h"
 
 #include "driver/gpio.h"
@@ -20,46 +19,25 @@
 #include "freertos/portmacro.h"
 #include "freertos/task.h"
 #include "sdkconfig.h"
-
 #include "driver/ledc.h"
 
-#define TAG "app"
+#define MAX_DUTY       8150
 
-#define ROT_ENC_A_GPIO      (gpio_num_t)6
-#define ROT_ENC_B_GPIO      (gpio_num_t)11
+#define DRV_A1    (gpio_num_t)17
+#define DRV_A2    (gpio_num_t)16
+#define DRV_B1    (gpio_num_t)18
+#define DRV_B2    (gpio_num_t)19
 
-#define LEDC_HS_TIMER          LEDC_TIMER_0
-#define LEDC_HS_MODE           LEDC_HIGH_SPEED_MODE
-#define LEDC_HS_CH0_GPIO       (21)
-#define LEDC_HS_CH0_CHANNEL    LEDC_CHANNEL_0
-#define LEDC_HS_CH1_GPIO       (20)
-#define LEDC_HS_CH1_CHANNEL    LEDC_CHANNEL_1
-
-#define LEDC_LS_TIMER          LEDC_TIMER_1
-#define LEDC_LS_MODE           LEDC_LOW_SPEED_MODE
-
-#define LEDC_LS_CH2_GPIO       (4)
-#define LEDC_LS_CH2_CHANNEL    LEDC_CHANNEL_2
-#define LEDC_LS_CH3_GPIO       (5)
-#define LEDC_LS_CH3_CHANNEL    LEDC_CHANNEL_3
-
-#define LEDC_TEST_CH_NUM       (4)
-#define LEDC_TEST_DUTY         (2000)    // ~8150 max
-#define LEDC_TEST_FADE_TIME    (100)
-
-
-#define GPIO_OUTPUT_IO_0    (gpio_num_t)18
-#define GPIO_OUTPUT_IO_1    (gpio_num_t)19
-#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<GPIO_OUTPUT_IO_0) | (1ULL<<GPIO_OUTPUT_IO_1))
+#define GPIO_OUTPUT_PIN_SEL  ((1ULL<<DRV_A1) | (1ULL<<DRV_A2) | (1ULL<<DRV_B1) | (1ULL<<DRV_B2))
 
 class MotorsDriver {
-public:
-    MotorsDriver();
-    int set_speed(int left, int right);
-    int stop();
-private:
-    gpio_config_t io_conf;
-    ledc_channel_config_t ledc_channel[LEDC_TEST_CH_NUM];
+    public:
+        MotorsDriver();
+        void set_speed(int left, int right);
+        void stop();
+    private:
+        ledc_channel_config_t pwm_channel_A;
+        ledc_channel_config_t pwm_channel_B;
 };
 
 #endif //BOLT_MOTORS_DRIVER_H
