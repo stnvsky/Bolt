@@ -71,14 +71,14 @@ void MotorsDriver::set_speed(int left, int right) {
 
     if (right < 0)
     {
-        gpio_set_level(DRV_B1, 1);
-        gpio_set_level(DRV_B2, 0);
+        gpio_set_level(DRV_B1, 0);
+        gpio_set_level(DRV_B2, 1);
         right_speed = (-right * MAX_DUTY)/ 100;
     }
     else
     {
-        gpio_set_level(DRV_B1, 0);
-        gpio_set_level(DRV_B2, 1);
+        gpio_set_level(DRV_B1, 1);
+        gpio_set_level(DRV_B2, 0);
         right_speed = (right * MAX_DUTY)/ 100;
     }
 

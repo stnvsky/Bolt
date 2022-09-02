@@ -3,6 +3,6 @@
 
 #include "motors_driver.h"
 
-void vTaskMotors( void * pvParameters );
+[[noreturn]] void vTaskMotors( void * pvParameters );
 
 #endif // MOTORS_H
