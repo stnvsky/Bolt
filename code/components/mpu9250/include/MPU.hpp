@@ -251,7 +251,6 @@ class MPU
 
     mpu_bus_t* bus;         /*!< Communication bus pointer, I2C / SPI */
     mpu_addr_handle_t addr; /*!< I2C address / SPI device handle */
-    uint8_t buffer[16];     /*!< Commom buffer for temporary data */
     esp_err_t err;          /*!< Holds last error code */
 };
 
@@ -263,7 +262,7 @@ class MPU
 namespace mpud
 {
 /*! Default Constructor. */
-inline MPU::MPU() : MPU(MPU_DEFAULT_BUS){};
+inline MPU::MPU() : MPU(MPU_DEFAULT_BUS) {}
 /**
  * @brief Contruct a MPU in the given communication bus.
  * @param bus Bus protocol object of type `I2Cbus` or `SPIbus`.
@@ -274,7 +273,7 @@ inline MPU::MPU(mpu_bus_t& bus) : MPU(bus, MPU_DEFAULT_ADDR_HANDLE) {}
  * @param bus Bus protocol object of type `I2Cbus` or `SPIbus`.
  * @param addr I2C address (`mpu_i2caddr_t`) or SPI device handle (`spi_device_handle_t`).
  */
-inline MPU::MPU(mpu_bus_t& bus, mpu_addr_handle_t addr) : bus{&bus}, addr{addr}, buffer{0}, err{ESP_OK} {}
+inline MPU::MPU(mpu_bus_t& bus, mpu_addr_handle_t addr) : bus{&bus}, addr{addr}, err{ESP_OK} {}
 /** Default Destructor, does nothing. */
 inline MPU::~MPU() = default;
 /**

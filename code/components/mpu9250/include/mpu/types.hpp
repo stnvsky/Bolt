@@ -30,11 +30,13 @@ typedef enum {  //
 static constexpr mpu_i2caddr_t MPU_DEFAULT_I2CADDRESS = MPU_I2CADDRESS_AD0_LOW;
 
 #ifdef CONFIG_MPU_I2C
+#include "I2Cbus.hpp"
 typedef I2C_t mpu_bus_t;                 /*!< Communication bus type, `I2Cbus` or `SPIbus`. */
 typedef mpu_i2caddr_t mpu_addr_handle_t; /*!< MPU Address/Handle type, `mpu_i2caddr_t` or `spi_device_handle_t` */
 static constexpr mpu_bus_t& MPU_DEFAULT_BUS                = i2c0;
 static constexpr mpu_addr_handle_t MPU_DEFAULT_ADDR_HANDLE = MPU_DEFAULT_I2CADDRESS;
 #elif CONFIG_MPU_SPI
+#include "SPIbus.hpp"
 typedef SPI_t mpu_bus_t;
 typedef spi_device_handle_t mpu_addr_handle_t;
 static constexpr mpu_bus_t& MPU_DEFAULT_BUS                = hspi;
@@ -238,17 +240,28 @@ typedef enum {
 } auxi2c_clock_t;
 
 /*! Auxiliary I2C Master’s transition from one slave read to the next slave read */
-typedef enum { AUXI2C_TRANS_RESTART = 0, AUXI2C_TRANS_STOP = 1 } auxi2c_trans_t;
+typedef enum {  //
+    AUXI2C_TRANS_RESTART = 0,
+    AUXI2C_TRANS_STOP    = 1
+} auxi2c_trans_t;
 
 /**
  * @brief Auxiliary I2C Slaves slots
  * @note For MPU9150 & MPU9250: \n
  *  The MPU uses SLAVE0 and SLAVE1 to read Compass data so do not use this slave slots when compass is enabled.
  * */
-typedef enum { AUXI2C_SLAVE_0 = 0, AUXI2C_SLAVE_1 = 1, AUXI2C_SLAVE_2 = 2, AUXI2C_SLAVE_3 = 3 } auxi2c_slv_t;
+typedef enum {  //
+    AUXI2C_SLAVE_0 = 0,
+    AUXI2C_SLAVE_1 = 1,
+    AUXI2C_SLAVE_2 = 2,
+    AUXI2C_SLAVE_3 = 3
+} auxi2c_slv_t;
 
 /*! Auxiliary I2C operation */
-typedef enum { AUXI2C_WRITE = 0, AUXI2C_READ = 1 } auxi2c_rw_t;
+typedef enum {  //
+    AUXI2C_WRITE = 0,
+    AUXI2C_READ  = 1
+} auxi2c_rw_t;
 
 /**
  * @brief Auxiliary I2C, EOW = end of word, use for swap
@@ -335,20 +348,35 @@ static constexpr auxi2c_stat_t AUXI2C_STAT_SLV0_NACK = (1 << regs::I2CMST_STAT_S
 
 #if defined CONFIG_MPU9150 || (defined CONFIG_MPU6050 && !defined CONFIG_MPU6000)
 /*! Auxiliary I2C bus VDDIO level [MPU6050 / MPU9150 only] */
-typedef enum { AUXVDDIO_LVL_VLOGIC = 0, AUXVDDIO_LVL_VDD = 1 } auxvddio_lvl_t;
+typedef enum {  //
+    AUXVDDIO_LVL_VLOGIC = 0,
+    AUXVDDIO_LVL_VDD    = 1
+} auxvddio_lvl_t;
 #endif
 
 /*! Interrupt active level */
-typedef enum { INT_LVL_ACTIVE_HIGH = 0, INT_LVL_ACTIVE_LOW = 1 } int_lvl_t;
+typedef enum {  //
+    INT_LVL_ACTIVE_HIGH = 0,
+    INT_LVL_ACTIVE_LOW  = 1
+} int_lvl_t;
 
 /*! Interrupt drive state */
-typedef enum { INT_DRV_PUSHPULL = 0, INT_DRV_OPENDRAIN = 1 } int_drive_t;
+typedef enum {  //
+    INT_DRV_PUSHPULL  = 0,
+    INT_DRV_OPENDRAIN = 1
+} int_drive_t;
 
 /*! Interrupt mode */
-typedef enum { INT_MODE_PULSE50US = 0, INT_MODE_LATCH = 1 } int_mode_t;
+typedef enum {  //
+    INT_MODE_PULSE50US = 0,
+    INT_MODE_LATCH     = 1
+} int_mode_t;
 
 /*! Interrupt clear mode */
-typedef enum { INT_CLEAR_STATUS_REG = 0, INT_CLEAR_ANYREAD = 1 } int_clear_t;
+typedef enum {  //
+    INT_CLEAR_STATUS_REG = 0,
+    INT_CLEAR_ANYREAD    = 1
+} int_clear_t;
 
 /*! Interrupt configuration struct */
 typedef struct
@@ -394,11 +422,13 @@ static constexpr int_stat_t INT_STAT_ZERO_MOTION = (1 << regs::INT_STATUS_ZEROMO
 
 #ifdef CONFIG_MPU6500
 /*! MPU6500 Fifo size */
-typedef enum { FIFO_SIZE_512B = 0, FIFO_SIZE_1K = 1, FIFO_SIZE_2K = 2, FIFO_SIZE_4K = 3 } fifo_size_t;
+typedef enum {  //
+    FIFO_SIZE_512B = 0,
+    FIFO_SIZE_1K   = 1,
+    FIFO_SIZE_2K   = 2,
+    FIFO_SIZE_4K   = 3
+} fifo_size_t;
 #endif
-
-/*! DMP Interrupt mode */
-typedef enum { DMP_INT_MODE_PACKET = 0, DMP_INT_MODE_GESTURE = 1 } dmp_int_mode_t;
 
 /*! FIFO mode */
 typedef enum {
@@ -421,51 +451,29 @@ static constexpr fifo_config_t FIFO_CFG_SLAVE3      = (1 << 8);
 static constexpr fifo_config_t FIFO_CFG_COMPASS = (FIFO_CFG_SLAVE0);  // 8 bytes
 #endif
 
-// Enable DMP features
-/* @note DMP_FEATURE_LP_QUAT and DMP_FEATURE_6X_LP_QUAT are mutually exclusive.
- * @note DMP_FEATURE_SEND_RAW_GYRO and DMP_FEATURE_SEND_CAL_GYRO are also
- * mutually exclusive.
- * @note DMP_FEATURE_PEDOMETER is always enabled.
- */
-
-/* typedef uint16_t dmp_features_t;
-static constexpr dmp_features_t DMP_FEATURE_TAP =            {0x001};
-static constexpr dmp_features_t DMP_FEATURE_ANDROID_ORIENT = {0x002};
-static constexpr dmp_features_t DMP_FEATURE_LP_QUAT =        {0x004};
-static constexpr dmp_features_t DMP_FEATURE_PEDOMETER =      {0x008};
-static constexpr dmp_features_t DMP_FEATURE_6X_LP_QUAT =     {0x010};
-static constexpr dmp_features_t DMP_FEATURE_GYRO_CAL =       {0x020};
-static constexpr dmp_features_t DMP_FEATURE_SEND_RAW_ACCEL = {0x040};
-static constexpr dmp_features_t DMP_FEATURE_SEND_RAW_GYRO =  {0x080};
-static constexpr dmp_features_t DMP_FEATURE_SEND_CAL_GYRO =  {0x100};
-
-// DMP Tap axes
-typedef uint8_t dmp_tap_axis_t;
-static constexpr dmp_tap_axis_t DMP_TAP_X       {0x30};
-static constexpr dmp_tap_axis_t DMP_TAP_Y       {0x0C};
-static constexpr dmp_tap_axis_t DMP_TAP_Z       {0x03};
-static constexpr dmp_tap_axis_t DMP_TAP_XYZ     {0x3F};
- */
-
 /*! Generic axes struct to store sensors' data */
-template <class type_t>
-struct axes_t
+template <class T>
+struct Axes
 {
     union
     {
-        type_t xyz[3] = {0};
+        T xyz[3];
         struct
         {
-            type_t x;
-            type_t y;
-            type_t z;
+            T x;
+            T y;
+            T z;
         };
     };
-    type_t& operator[](int i) { return xyz[i]; }
+    Axes() : x{0}, y{0}, z{0} {}
+    Axes(T x, T y, T z) : x{x}, y{y}, z{z} {}
+    T& operator[](int i) { return xyz[i]; }
+    const T& operator[](int i) const { return xyz[i]; }
 };
-// Ready-to-use axes types
-typedef axes_t<int16_t> raw_axes_t;  //!< Axes type to hold gyroscope, accelerometer, magnetometer raw data.
-typedef axes_t<float> float_axes_t;  //!< Axes type to hold converted sensor data.
+/* Readymade axes types */
+typedef Axes<int16_t> raw_axes_t;  //!< Axes type to store gyroscope, accelerometer, magnetometer raw data.
+typedef Axes<float> float_axes_t;  //!< Axes type to store converted sensor data as float.
+typedef Axes<int32_t> axes_q16_t;  //!< Axes type in q16 fixed point format.
 
 /*! Sensors struct for fast reading all sensors at once */
 typedef struct
@@ -501,18 +509,18 @@ typedef enum {
 
 /*! Magnetometer sensor status 1 */
 typedef uint8_t mag_stat1_t;
-static constexpr mag_stat1_t MAG_STAT1_DATA_RDY = {1 << regs::mag::STATUS1_DATA_RDY_BIT};
+static constexpr mag_stat1_t MAG_STAT1_DATA_RDY = (1 << regs::mag::STATUS1_DATA_RDY_BIT);
 #ifdef CONFIG_MPU_AK8963
-static constexpr mag_stat1_t MAG_STAT1_DATA_OVERRUN = {1 << regs::mag::STATUS1_DATA_OVERRUN_BIT};
+static constexpr mag_stat1_t MAG_STAT1_DATA_OVERRUN = (1 << regs::mag::STATUS1_DATA_OVERRUN_BIT);
 #endif
 
 /*! Magnetometer sensor status 2 */
 typedef uint8_t mag_stat2_t;
-static constexpr mag_stat2_t MAG_STAT2_SENSOR_OVERFLOW = {1 << regs::mag::STATUS2_OVERFLOW_BIT};
+static constexpr mag_stat2_t MAG_STAT2_SENSOR_OVERFLOW = (1 << regs::mag::STATUS2_OVERFLOW_BIT);
 #ifdef CONFIG_MPU_AK8963
-static constexpr mag_stat2_t MAG_STAT2_BIT_OUTPUT_SETTING = {1 << regs::mag::STATUS2_BIT_OUTPUT_M_BIT};
+static constexpr mag_stat2_t MAG_STAT2_BIT_OUTPUT_SETTING = (1 << regs::mag::STATUS2_BIT_OUTPUT_M_BIT);
 #elif CONFIG_MPU_AK8975
-static constexpr mag_stat2_t MAG_STAT2_DATA_ERROR{1 << regs::mag::STATUS2_DATA_ERROR_BIT};
+static constexpr mag_stat2_t MAG_STAT2_DATA_ERROR = (1 << regs::mag::STATUS2_DATA_ERROR_BIT);
 #endif
 
 #ifdef CONFIG_MPU_AK8963

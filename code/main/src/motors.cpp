@@ -150,7 +150,7 @@ static bool IRAM_ATTR velocity_callback(gptimer_handle_t, const gptimer_alarm_ev
         {
             motors.set_speed(v, v);
             vTaskDelay(500 / portTICK_PERIOD_MS);
-            printf("(%d) velocity %.2f m/s, %.2f m/s\n", v, velocity_left_1e6/1e6, velocity_right_1e6/1e6);
+//            printf("(%d) velocity %.2f m/s, %.2f m/s\n", v, velocity_left_1e6/1e6, velocity_right_1e6/1e6);
 //            printf("(%d) last count %d, %d\n", v, last_1_count, last_2_count);
             vTaskDelay(500 / portTICK_PERIOD_MS);
         }
