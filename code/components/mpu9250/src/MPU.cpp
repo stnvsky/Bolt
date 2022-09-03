@@ -78,10 +78,10 @@ esp_err_t MPU::initialize()
 
         // setup magnetometer
 #ifdef CONFIG_MPU_AK89xx
-    if (MPU_ERR_CHECK(compassInit())) return err;
-#ifdef CONFIG_MPU_AK8963
-    if (MPU_ERR_CHECK(compassSetSensitivity(MAG_SENSITIVITY_0_15_uT))) return err;
-#endif
+//    if (MPU_ERR_CHECK(compassInit())) return err;
+//#ifdef CONFIG_MPU_AK8963
+//    if (MPU_ERR_CHECK(compassSetSensitivity(MAG_SENSITIVITY_0_15_uT))) return err;
+//#endif
 #endif
 
     // set sample rate to 50Hz

@@ -1,12 +1,8 @@
 
 #include "IMU.h"
 
-
-
-void vMPU( void * pvParameters )
+[[noreturn]] void vMPU(void *)
 {
-    (void)pvParameters;
-
     vTaskDelay(3000 / portTICK_PERIOD_MS);
 
     spi_device_handle_t mpu_spi_handle;
@@ -14,7 +10,7 @@ void vMPU( void * pvParameters )
     hspi.begin(MOSI, MISO, SCLK);
     hspi.addDevice(0, CLOCK_SPEED, CS, &mpu_spi_handle);
 
-    MPU_t MPU;  // create a default MPU object
+    MPUdmp_t MPU;  // create a default MPU object
     MPU.setBus(hspi);  // set bus port, not really needed here since default is HSPI
     MPU.setAddr(mpu_spi_handle);  // set spi_device_handle, always needed!
 
@@ -23,18 +19,23 @@ void vMPU( void * pvParameters )
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
     printf("MPU connection successful");
-    ESP_ERROR_CHECK(MPU.initialize());  // initialize the chip and set initial configurations
+
+    MPU.reset();
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
+    ESP_ERROR_CHECK(MPU.loadDMPFirmware());
+    ESP_ERROR_CHECK(MPU.enableDMP());
+    ESP_ERROR_CHECK(MPU.setDMPFeatures(mpud::DMP_FEATURE_LP_6X_QUAT));
+    ESP_ERROR_CHECK(MPU.setDMPInterruptMode(mpud::DMP_INT_MODE_CONTINUOUS));
 
     // Reading sensor data
     mpud::raw_axes_t accelRaw;   // x, y, z axes as int16
-    mpud::float_axes_t accelG;   // accel axes in (g) gravity format
+    mpud::raw_axes_t gyroRaw;   // x, y, z axes as int16
+    mpud::quat_q30_t quaternion;
 
     while (true) {
-        // Read
-        MPU.acceleration(&accelRaw);  // fetch raw data from the registers
-        accelG = mpud::accelGravity(accelRaw, mpud::ACCEL_FS_4G);
-        printf ("%f %f %f\n", accelG.x, accelG.y, accelG.z - 0.04f);
+        MPU.readDMPPacket(&quaternion, &gyroRaw, &accelRaw);
 
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        printf ("w: %12d, x: %12d, y: %12d, z: %12d\n", quaternion.w, quaternion.x, quaternion.y, quaternion.z);
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
