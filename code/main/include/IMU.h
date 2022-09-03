@@ -1,7 +1,7 @@
 #ifndef IMU_H
 #define IMU_H
 
-#include "MPUdmp.hpp"
+#include "MPU.hpp"
 #include "SPIbus.hpp"
 #include "mpu/math.hpp"
 #include "mpu/types.hpp"
