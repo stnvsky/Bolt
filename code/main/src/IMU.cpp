@@ -1,7 +1,7 @@
 
 #include "IMU.h"
 
-
+uint32_t theta_1e6 = 0;
 
 void vMPU( void * pvParameters )
 {
@@ -32,9 +32,10 @@ void vMPU( void * pvParameters )
     while (true) {
         // Read
         MPU.acceleration(&accelRaw);  // fetch raw data from the registers
-        accelG = mpud::accelGravity(accelRaw, mpud::ACCEL_FS_4G);
-        printf ("%f %f %f\n", accelG.x, accelG.y, accelG.z - 0.04f);
+        accelG = mpud::accelGravity(accelRaw, mpud::ACCEL_FS_2G);
+        printf ("%f\n", atan2(accelG.y, accelG.z - 0.04f));
 
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        theta_1e6 = static_cast<uint32_t>(atan2(accelG.y, accelG.z - 0.04f) * 1000000);
+        vTaskDelay(50 / portTICK_PERIOD_MS);
     }
 }
