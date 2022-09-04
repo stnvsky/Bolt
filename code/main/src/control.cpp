@@ -46,7 +46,7 @@ static auto prev_e2 = 0.0f;
         prev_e2 = e2;
 
         auto speed = static_cast<int32_t>(u);
-        printf("theta = %.2f, velocity = %.2f, set_speed = %d\n", theta, velocity, speed);
+        printf("theta = %.2f, velocity = %.2f, set_speed = %ld\n", theta, velocity, speed);
         motors.set_speed(speed,speed);
 
         vTaskDelay(50 / portTICK_PERIOD_MS);

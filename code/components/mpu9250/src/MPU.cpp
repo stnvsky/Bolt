@@ -1928,13 +1928,11 @@ esp_err_t MPU::compassSetMode(mag_mode_t mode)
             .addr            = COMPASS_I2CADDRESS,
             .rw              = AUXI2C_READ,
             .reg_addr        = regs::mag::STATUS1,
-            .reg_dis         = 0,
-            .sample_delay_en = 1,
-            {{
-                .swap_en     = 0,
-                .end_of_word = (auxi2c_eow_t) 0,
-                .rxlength    = 8  //
-            }}                    //
+            .reg_dis         = false,
+            .sample_delay_en = true,
+            .swap_en     = false,
+            .end_of_word = (auxi2c_eow_t) 0,
+            .rxlength    = 8
         };
         if (MPU_ERR_CHECK(setAuxI2CSlaveConfig(kSlaveReadDataConfig))) return err;
 
@@ -1944,9 +1942,9 @@ esp_err_t MPU::compassSetMode(mag_mode_t mode)
             .addr            = COMPASS_I2CADDRESS,
             .rw              = AUXI2C_WRITE,
             .reg_addr        = regs::mag::CONTROL1,
-            .reg_dis         = 0,
-            .sample_delay_en = 1,
-            {.txdata = kControl1Value}  //
+            .reg_dis         = false,
+            .sample_delay_en = true,
+            .txdata = kControl1Value  //
         };
         if (MPU_ERR_CHECK(setAuxI2CSlaveConfig(kSlaveChgModeConfig))) return err;
         // enable slaves

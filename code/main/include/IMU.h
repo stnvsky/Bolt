@@ -20,7 +20,7 @@ static constexpr int CS = 10;
 static constexpr uint32_t CLOCK_SPEED = 100000;  // up to 1MHz for all registers, and 20MHz for sensor data registers only
 
 
-void vMPU( void * pvParameters );
+[[noreturn]] void vtaskMPU( void * pvParameters );
 int32_t get_theta();
 
 #endif // IMU_H

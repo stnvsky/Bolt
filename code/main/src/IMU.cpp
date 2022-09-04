@@ -8,7 +8,7 @@ int32_t get_theta()
     return theta_1e6;
 }
 
-[[noreturn]] void vMPU(void *)
+[[noreturn]] void vtaskMPU(void *)
 {
     vTaskDelay(3000 / portTICK_PERIOD_MS);
 
