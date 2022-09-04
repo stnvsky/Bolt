@@ -5,6 +5,8 @@
 #include <cmath>
 #include <vector>
 
+MotorsDriver motors;
+
 const auto GPIO_HALL_SENSOR_1_A =    static_cast<gpio_num_t>(36);
 const auto GPIO_HALL_SENSOR_1_B =    static_cast<gpio_num_t>(35);
 const auto GPIO_HALL_SENSOR_2_A =    static_cast<gpio_num_t>(25);
@@ -103,8 +105,6 @@ static bool IRAM_ATTR velocity_callback(gptimer_handle_t, const gptimer_alarm_ev
 
 [[noreturn]] void vTaskMotors(void *)
 {
-    MotorsDriver motors;
-
     //interrupt of rising edge
     gpio_config_t io_conf = {};
     io_conf.intr_type = GPIO_INTR_POSEDGE;
@@ -145,14 +145,17 @@ static bool IRAM_ATTR velocity_callback(gptimer_handle_t, const gptimer_alarm_ev
     gpio_isr_handler_add(GPIO_HALL_SENSOR_2_B, gpio_isr_handler, (void*) GPIO_HALL_SENSOR_2_B);
 
     for(;;) {
-        std::vector<int32_t> vec{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-        for (auto v : vec)
-        {
-            motors.set_speed(v, v);
-            vTaskDelay(500 / portTICK_PERIOD_MS);
-//            printf("(%d) velocity %.2f m/s, %.2f m/s\n", v, velocity_left_1e6/1e6, velocity_right_1e6/1e6);
-//            printf("(%d) last count %d, %d\n", v, last_1_count, last_2_count);
-            vTaskDelay(500 / portTICK_PERIOD_MS);
-        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
+//    for(;;) {
+//        std::vector<int32_t> vec{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+//        for (auto v : vec)
+//        {
+//            motors.set_speed(v, v);
+//            vTaskDelay(500 / portTICK_PERIOD_MS);
+////            printf("(%d) velocity %.2f m/s, %.2f m/s\n", v, velocity_left_1e6/1e6, velocity_right_1e6/1e6);
+////            printf("(%d) last count %d, %d\n", v, last_1_count, last_2_count);
+//
+//        }
+//    }
 }
