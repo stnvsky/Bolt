@@ -22,6 +22,14 @@ C = [0, 1, 0, 0];
 
 D = 0;
 
+h = 0.05;
+N = 36;
+z = tf('z', h);
+PID = Kp1 + Ki1*h * (1/(1-z)) + Kd1 * (N/(1 + N*h * (1/(1-z))));
+
+PIDtime = d2c(PID,'tustin');
+
+
 
 %s = tf('s');
 %sys1 = ss(A, B, C1, D);

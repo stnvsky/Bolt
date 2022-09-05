@@ -5,6 +5,9 @@
 #include <cmath>
 #include <vector>
 
+#include "esp_console.h"
+#include "esp_vfs_dev.h"
+
 MotorsDriver motors;
 
 const auto GPIO_HALL_SENSOR_1_A =    static_cast<gpio_num_t>(36);
@@ -103,6 +106,14 @@ static bool IRAM_ATTR velocity_callback(gptimer_handle_t, const gptimer_alarm_ev
     return false;
 }
 
+extern int change_kp1(int argc, char **argv);
+extern int change_ki1(int argc, char **argv);
+extern int change_kd1(int argc, char **argv);
+extern int change_kp2(int argc, char **argv);
+extern int change_kd2(int argc, char **argv);
+extern int change_inertion(int argc, char **argv);
+extern int print_settings(int argc, char **argv);
+
 [[noreturn]] void vTaskMotors(void *)
 {
     //interrupt of rising edge
@@ -144,18 +155,89 @@ static bool IRAM_ATTR velocity_callback(gptimer_handle_t, const gptimer_alarm_ev
     gpio_isr_handler_add(GPIO_HALL_SENSOR_2_A, gpio_isr_handler, (void*) GPIO_HALL_SENSOR_2_A);
     gpio_isr_handler_add(GPIO_HALL_SENSOR_2_B, gpio_isr_handler, (void*) GPIO_HALL_SENSOR_2_B);
 
+    static const char* TAG = "example";
+#define PROMPT_STR CONFIG_IDF_TARGET
+
+    esp_console_repl_t *repl = NULL;
+    esp_console_repl_config_t repl_config = ESP_CONSOLE_REPL_CONFIG_DEFAULT();
+    /* Prompt to be printed before each line.
+     * This can be customized, made dynamic, etc.
+     */
+    repl_config.prompt = PROMPT_STR ">";
+    repl_config.max_cmdline_length = 128;
+
+    esp_console_register_help_command();
+
+    esp_console_dev_uart_config_t hw_config = ESP_CONSOLE_DEV_UART_CONFIG_DEFAULT();
+    ESP_ERROR_CHECK(esp_console_new_repl_uart(&hw_config, &repl_config, &repl));
+
+    ESP_ERROR_CHECK(esp_console_start_repl(repl));
+
+
+    esp_console_cmd_t change_Kp1 = {
+            .command = "Kp1",
+            .help = "",
+            .hint = "",
+            .func = change_kp1,
+            .argtable = nullptr
+    };
+    esp_console_cmd_register(&change_Kp1);
+
+    esp_console_cmd_t change_Ki1 = {
+            .command = "Ki1",
+            .help = "",
+            .hint = "",
+            .func = change_ki1,
+            .argtable = nullptr
+    };
+    esp_console_cmd_register(&change_Ki1);
+
+    esp_console_cmd_t change_Kd1 = {
+            .command = "Kd1",
+            .help = "",
+            .hint = "",
+            .func = change_kd1,
+            .argtable = nullptr
+    };
+    esp_console_cmd_register(&change_Kd1);
+
+    esp_console_cmd_t change_Kp2 = {
+            .command = "Kp2",
+            .help = "",
+            .hint = "",
+            .func = change_kp2,
+            .argtable = nullptr
+    };
+    esp_console_cmd_register(&change_Kp2);
+
+    esp_console_cmd_t change_Kd2 = {
+            .command = "Kd2",
+            .help = "",
+            .hint = "",
+            .func = change_kd2,
+            .argtable = nullptr
+    };
+    esp_console_cmd_register(&change_Kd2);
+
+    esp_console_cmd_t printf_settings = {
+            .command = "p",
+            .help = "",
+            .hint = "",
+            .func = print_settings,
+            .argtable = nullptr
+    };
+    esp_console_cmd_register(&printf_settings);
+
+    esp_console_cmd_t change_inertion_cmd = {
+            .command = "iner",
+            .help = "",
+            .hint = "",
+            .func = change_inertion,
+            .argtable = nullptr
+    };
+    esp_console_cmd_register(&change_inertion_cmd);
+
     for(;;) {
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
-//    for(;;) {
-//        std::vector<int32_t> vec{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-//        for (auto v : vec)
-//        {
-//            motors.set_speed(v, v);
-//            vTaskDelay(500 / portTICK_PERIOD_MS);
-////            printf("(%d) velocity %.2f m/s, %.2f m/s\n", v, velocity_left_1e6/1e6, velocity_right_1e6/1e6);
-////            printf("(%d) last count %d, %d\n", v, last_1_count, last_2_count);
-//
-//        }
-//    }
 }

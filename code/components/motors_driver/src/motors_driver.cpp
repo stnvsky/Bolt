@@ -43,43 +43,61 @@ MotorsDriver::MotorsDriver() {
     ledc_channel_config(&this->pwm_channel_B);
 };
 
+const auto MOTORS_SAMPLING_PERIOD = 50.0f;
+auto InertionTime = 100.0f;
+
+int change_inertion(int argc, char **argv)
+{
+    long arg = strtol(argv[1], nullptr, 10);
+    InertionTime = static_cast<float>(arg);
+    return 0;
+}
+
 void MotorsDriver::set_speed(int left, int right) {
 
     int left_speed;
     int right_speed;
 
-    if (left < -100) left = -100;
-    if (left > 100) left = 100;
-    if (right < -100) right = -100;
-    if (right > 100) right = 100;
+    if (left < -50) left = -50;
+    if (left > 50) left = 50;
+    if (right < -50) right = -50;
+    if (right > 50) right = 50;
 
-    if (left < 0)
+    static float L_speed = 0;
+    static float R_speed = 0;
+    static float Tp = MOTORS_SAMPLING_PERIOD; 	/* Okres próbkowania */
+    auto T = (float)InertionTime;		/* Stała czasowa inercji nastawy silnika [ms] */
+
+    L_speed = (Tp/T) * (static_cast<float>(left) - L_speed) + L_speed;
+    R_speed = (Tp/T) * (static_cast<float>(right) - R_speed) + R_speed;
+
+    if (L_speed < 0)
     {
         gpio_set_level(DRV_A1, 1);
         gpio_set_level(DRV_A2, 0);
-        left_speed = (-left * MAX_DUTY)/ 100;
+        left_speed = (-static_cast<int32_t>(L_speed) * MAX_DUTY)/ 100;
     }
     else
     {
         gpio_set_level(DRV_A1, 0);
         gpio_set_level(DRV_A2, 1);
-        left_speed = (left * MAX_DUTY)/ 100;
+        left_speed = static_cast<int32_t>((L_speed) * MAX_DUTY)/ 100;
     }
 
     ledc_set_duty(this->pwm_channel_A.speed_mode, this->pwm_channel_A.channel, left_speed);
     ledc_update_duty(this->pwm_channel_A.speed_mode, this->pwm_channel_A.channel);
 
-    if (right < 0)
+    if (R_speed < 0)
     {
         gpio_set_level(DRV_B1, 0);
         gpio_set_level(DRV_B2, 1);
-        right_speed = (-right * MAX_DUTY)/ 100;
+        right_speed = (-static_cast<int32_t>(R_speed) * MAX_DUTY)/ 100;
     }
     else
     {
         gpio_set_level(DRV_B1, 1);
         gpio_set_level(DRV_B2, 0);
-        right_speed = (right * MAX_DUTY)/ 100;
+        right_speed = (static_cast<int32_t>(R_speed) * MAX_DUTY)/ 100;
     }
 
     ledc_set_duty(this->pwm_channel_B.speed_mode, this->pwm_channel_B.channel, right_speed);
