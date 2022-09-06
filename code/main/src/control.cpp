@@ -14,7 +14,7 @@ extern int32_t velocity_right_1e6; // [m/s] * 1e6
 const auto theta_set = 0.0f;
 const auto velocity_set = 0.0f;
 
-auto Kp1 = -5.0f;
+auto Kp1 = -80.0f;
 auto Ki1 = -10.69f;
 auto Kd1 = -0.2f;
 
@@ -87,8 +87,8 @@ int print_settings(int argc, char **argv)
         prev_e2 = e2;
 
         auto speed = static_cast<int32_t>(u);
-//        printf("theta = %.2f, velocity = %.2f, set_speed = %ld\n", theta, velocity, speed);
-        motors.set_speed(speed,speed);
+        //printf("theta = %.2f, velocity = %.2f, set_speed = %ld\n", theta, velocity, speed);
+        motors.set_speed(speed+30,speed+30);
 
         vTaskDelay(50 / portTICK_PERIOD_MS);
     }

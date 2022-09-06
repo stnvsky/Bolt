@@ -58,10 +58,10 @@ void MotorsDriver::set_speed(int left, int right) {
     int left_speed;
     int right_speed;
 
-    if (left < -50) left = -50;
-    if (left > 50) left = 50;
-    if (right < -50) right = -50;
-    if (right > 50) right = 50;
+    if (left < -60) left = -60;
+    if (left > 60) left = 60;
+    if (right < -60) right = -60;
+    if (right > 60) right = 60;
 
     static float L_speed = 0;
     static float R_speed = 0;
