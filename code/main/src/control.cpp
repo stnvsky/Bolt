@@ -71,7 +71,7 @@ int print_settings(int argc, char **argv)
 [[noreturn]] void vTaskControl(void *)
 {
     while (true) {
-        auto theta = static_cast<float>(get_theta())/1000000.0f;
+        auto theta = get_theta();
         auto velocity = static_cast<float>((velocity_left_1e6+velocity_right_1e6))/2000000.0f;
 
         auto e1 = theta_set - theta;

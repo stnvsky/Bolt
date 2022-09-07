@@ -1,9 +1,9 @@
 
 #include "IMU.h"
 
-static int32_t theta_1e6 = 0;
+static float theta_1e6 = 0;
 
-int32_t get_theta()
+float get_theta()
 {
     return theta_1e6;
 }
@@ -66,7 +66,7 @@ int32_t get_theta()
         auto k22 = (-p12*p21 + p22*(b + p11))*detK;
 
         auto y1 = th;
-        auto y2 = gyroDegPerSec.x/1000.0;
+        auto y2 = gyroDegPerSec.x/1000.0f;
         x1 = last_x1 - h*last_x2 + k11*(y1-last_x1) + k12*(y2-last_x2);
         x2 = last_x2 + k21*(y1-last_x1) + k22*(y2-last_x2);
 
@@ -82,7 +82,7 @@ int32_t get_theta()
 
         last_x1 = x1;
         last_x2 = x2;
-        theta_1e6 = static_cast<int32_t>(x1 * 1000000);
+        theta_1e6 = x1;
 
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }

@@ -21,6 +21,6 @@ static constexpr uint32_t CLOCK_SPEED = 100000;  // up to 1MHz for all registers
 
 
 [[noreturn]] void vtaskMPU( void * pvParameters );
-int32_t get_theta();
+float get_theta();
 
 #endif // IMU_H
