@@ -1,13 +1,7 @@
 data = csvread('./acc_gyro_data.csv');
 
-% CALCULATE ANGLE FROM GYROSCOPE DATA
-gyro = zeros(1, size(data,1));
-gyro(1) = 0;
-gyro_sum = 0;
-for i = 2:size(data,1)
-    gyro_sum = gyro_sum + (data(i,2) + data(i-1,2))/2;
-    gyro(i) = gyro_sum/1130;
-end
+% SCALE GYRO DATA
+data(:,2) = data(:,2)/1130;
 
 % KALMAN FILTER IMPLEMENTATION
 h = 0.05;
@@ -39,7 +33,7 @@ for i = 1:size(data,1)
           (p21*(b + p22) - p21*p22)*detK,                      (-p12*p21 + p22*(b + p11))*detK                      ];
     %}
   
-    x(:,i+1)  = F*x(:,i) + K*([data(i,1),gyro(i)]'-H*x(:,i));
+    x(:,i+1)  = F*x(:,i) + K*(data(i,:)'-H*x(:,i));
     %{
     k11 = K(1,1);
     k12 = K(1,2);
@@ -68,9 +62,10 @@ end
 % SHOW DATA
 n = size(data,1);
 figure
-plot(1:n, data(:,1), 'b')
+plot(1:n, data(:,1)*57.3248, 'b')
 hold on
-plot(1:n, gyro, 'g')
+plot(1:n, data(:,2)*57.3248, 'g')
 hold on
-plot(1:n+1, x(1, :), 'r')
-legend('accel','gyro', 'kalman')
+plot(1:n+1, x(1,:)*57.3248, 'r')
+legend('accel','gyro', 'x1')
+grid on

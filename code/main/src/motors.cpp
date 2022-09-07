@@ -155,7 +155,6 @@ extern int print_settings(int argc, char **argv);
     gpio_isr_handler_add(GPIO_HALL_SENSOR_2_A, gpio_isr_handler, (void*) GPIO_HALL_SENSOR_2_A);
     gpio_isr_handler_add(GPIO_HALL_SENSOR_2_B, gpio_isr_handler, (void*) GPIO_HALL_SENSOR_2_B);
 
-    static const char* TAG = "example";
 #define PROMPT_STR CONFIG_IDF_TARGET
 
     esp_console_repl_t *repl = NULL;

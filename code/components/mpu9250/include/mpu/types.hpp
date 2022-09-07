@@ -329,7 +329,7 @@ typedef struct
             auxi2c_eow_t end_of_word : 1; /**< Define at which register address a word ends, for swap low and high
                                            * bytes of the word (when swap enabled). */
             uint8_t rxlength : 4;         //!< Number of bytes to read, when set to read, max = 15.
-        };
+        } rx;
         // when writing
         uint8_t txdata;  //!< Data to transfer when slave is set to write.
     };

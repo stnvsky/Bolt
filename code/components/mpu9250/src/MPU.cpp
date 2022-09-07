@@ -1399,9 +1399,9 @@ esp_err_t MPU::setAuxI2CSlaveConfig(const auxi2c_slv_config_t& config)
     if (config.rw == AUXI2C_READ) {
         buffer[2] &= 1 << regs::I2C_SLV_EN_BIT;  // keep enable bit, clear the rest
         buffer[2] |= config.reg_dis << regs::I2C_SLV_REG_DIS_BIT;
-        buffer[2] |= config.swap_en << regs::I2C_SLV_BYTE_SW_BIT;
-        buffer[2] |= config.end_of_word << regs::I2C_SLV_GRP_BIT;
-        buffer[2] |= config.rxlength & 0xF;
+        buffer[2] |= config.rx.swap_en << regs::I2C_SLV_BYTE_SW_BIT;
+        buffer[2] |= config.rx.end_of_word << regs::I2C_SLV_GRP_BIT;
+        buffer[2] |= config.rx.rxlength & 0xF;
     }
     else {                                                     // AUXI2C_WRITE
         buffer[2] &= ~(1 << regs::I2C_SLV_REG_DIS_BIT | 0xF);  // clear length bits and register disable bit
@@ -1437,9 +1437,9 @@ auxi2c_slv_config_t MPU::getAuxI2CSlaveConfig(auxi2c_slv_t slave)
     config.reg_addr = buffer[1];
     config.reg_dis  = (buffer[2] >> regs::I2C_SLV_REG_DIS_BIT) & 0x1;
     if (config.rw == AUXI2C_READ) {
-        config.swap_en     = (buffer[2] >> regs::I2C_SLV_BYTE_SW_BIT) & 0x1;
-        config.end_of_word = (auxi2c_eow_t)((buffer[2] >> regs::I2C_SLV_GRP_BIT) & 0x1);
-        config.rxlength    = buffer[2] & 0xF;
+        config.rx.swap_en     = (buffer[2] >> regs::I2C_SLV_BYTE_SW_BIT) & 0x1;
+        config.rx.end_of_word = (auxi2c_eow_t)((buffer[2] >> regs::I2C_SLV_GRP_BIT) & 0x1);
+        config.rx.rxlength    = buffer[2] & 0xF;
     }
     else {
         MPU_ERR_CHECK(readByte(regs::I2C_SLV0_DO + slave, buffer + 3));
@@ -1930,9 +1930,11 @@ esp_err_t MPU::compassSetMode(mag_mode_t mode)
             .reg_addr        = regs::mag::STATUS1,
             .reg_dis         = false,
             .sample_delay_en = true,
-            .swap_en     = false,
-            .end_of_word = (auxi2c_eow_t) 0,
-            .rxlength    = 8
+            .rx {
+                .swap_en     = false,
+                .end_of_word = (auxi2c_eow_t) 0,
+                .rxlength    = 8
+            },
         };
         if (MPU_ERR_CHECK(setAuxI2CSlaveConfig(kSlaveReadDataConfig))) return err;
 
