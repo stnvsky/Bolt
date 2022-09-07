@@ -1,0 +1,8 @@
+
+#ifndef BOLT_WIFI_CONFIG_H
+#define BOLT_WIFI_CONFIG_H
+
+#define CONFIG_WIFI_SSID ""
+#define CONFIG_WIFI_SSID ""
+
+#endif //BOLT_WIFI_CONFIG_H

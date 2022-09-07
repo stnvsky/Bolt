@@ -30,8 +30,9 @@
 #include "sdkconfig.h"
 #include "esp_wifi_default.h"
 
-#define WIFI_SSID ""
-#define WIFI_PASSWORD ""
+#include "wifi_config.h"
+#define WIFI_SSID CONFIG_WIFI_SSID
+#define WIFI_PASSWORD CONFIG_WIFI_SSID
 
 #define HOST_IP_ADDR "192.168.0.42"
 #define PORT 12345
