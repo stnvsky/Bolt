@@ -2,7 +2,7 @@
 #ifndef BOLT_WIFI_CONFIG_H
 #define BOLT_WIFI_CONFIG_H
 
-#define CONFIG_WIFI_SSID ""
-#define CONFIG_WIFI_SSID ""
+#define CONFIG_WIFI_SSID       ""
+#define CONFIG_WIFI_PASSWORD   ""
 
 #endif //BOLT_WIFI_CONFIG_H

@@ -17,6 +17,8 @@
 
 #include "nvs_flash.h"
 
+#include "IMU.h"
+
 /* Common functions for protocol examples, to establish Wi-Fi or Ethernet connection.
 
    This example code is in the Public Domain (or CC0 licensed, at your option.)
@@ -31,21 +33,20 @@
 #include "esp_wifi_default.h"
 
 #include "wifi_config.h"
-#define WIFI_SSID CONFIG_WIFI_SSID
-#define WIFI_PASSWORD CONFIG_WIFI_SSID
+#define WIFI_SSID      CONFIG_WIFI_SSID
+#define WIFI_PASSWORD  CONFIG_WIFI_PASSWORD
 
 #define HOST_IP_ADDR "192.168.0.42"
 #define PORT 12345
 
 static const char *TAG = "example";
-static const char *payload = "Message from ESP32 ";
 
 #define NR_OF_IP_ADDRESSES_TO_WAIT_FOR (s_active_interfaces)
 #define EXAMPLE_DO_CONNECT 1
 
 #define EXAMPLE_WIFI_SCAN_METHOD WIFI_ALL_CHANNEL_SCAN
 #define EXAMPLE_WIFI_CONNECT_AP_SORT_METHOD WIFI_CONNECT_AP_BY_SIGNAL
-#define EXAMPLE_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA2_PSK
+#define EXAMPLE_WIFI_SCAN_AUTH_MODE_THRESHOLD WIFI_AUTH_WPA2_WPA3_PSK
 
 static int s_active_interfaces = 0;
 static SemaphoreHandle_t s_semph_get_ip_addrs;
@@ -253,14 +254,18 @@ void vTaskUdpClient(void *)
     }
     ESP_LOGI(TAG, "Socket created, sending to %s:%d", HOST_IP_ADDR, PORT);
 
+    char payload[128] = "";
+
     while (true) {
+        memset(payload, 0, sizeof(payload));
+        sprintf(payload, "%.2f\n", get_theta());
 
         int err = sendto(sock, payload, strlen(payload), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
         if (err < 0) {
             ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
             break;
         }
-        ESP_LOGI(TAG, "Message sent");
+        //ESP_LOGI(TAG, "Message sent");
 
 //        struct sockaddr_storage source_addr; // Large enough for both IPv4 or IPv6
 //        socklen_t socklen = sizeof(source_addr);
@@ -281,7 +286,6 @@ void vTaskUdpClient(void *)
 //                break;
 //            }
 //        }
-
-        vTaskDelay(2000 / portTICK_PERIOD_MS);
+        vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
