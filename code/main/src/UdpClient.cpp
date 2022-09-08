@@ -286,6 +286,6 @@ void vTaskUdpClient(void *)
 //                break;
 //            }
 //        }
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(50 / portTICK_PERIOD_MS);
     }
 }
