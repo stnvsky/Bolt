@@ -68,8 +68,11 @@ void MotorsDriver::set_speed(int left, int right) {
     static float Tp = MOTORS_SAMPLING_PERIOD; 	/* Okres próbkowania */
     auto T = (float)InertionTime;		/* Stała czasowa inercji nastawy silnika [ms] */
 
-    L_speed = (Tp/T) * (static_cast<float>(left) - L_speed) + L_speed;
-    R_speed = (Tp/T) * (static_cast<float>(right) - R_speed) + R_speed;
+//    L_speed = (Tp/T) * (static_cast<float>(left) - L_speed) + L_speed;
+//    R_speed = (Tp/T) * (static_cast<float>(right) - R_speed) + R_speed;
+
+    L_speed = static_cast<float>(left);
+    R_speed = static_cast<float>(right);
 
     if (L_speed < 0)
     {

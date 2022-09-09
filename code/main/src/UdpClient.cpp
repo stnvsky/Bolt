@@ -228,45 +228,47 @@ static void wifi_stop()
     s_example_esp_netif = nullptr;
 }
 
+extern int change_kp1_alternative(const char* string);
+
 void vTaskUdpClient(void *)
 {
-    char rx_buffer[128];
-    char host_ip[] = HOST_IP_ADDR;
-    int addr_family = 0;
-    int ip_protocol = 0;
-
+//    char rx_buffer[128];
+//    char host_ip[] = HOST_IP_ADDR;
+//    int addr_family = 0;
+//    int ip_protocol = 0;
+//
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
     ESP_ERROR_CHECK(example_connect());
-
-    struct sockaddr_in dest_addr;
-    dest_addr.sin_addr.s_addr = inet_addr(HOST_IP_ADDR);
-    dest_addr.sin_family = AF_INET;
-    dest_addr.sin_port = htons(PORT);
-    addr_family = AF_INET;
-    ip_protocol = IPPROTO_IP;
-
-    int sock = socket(addr_family, SOCK_DGRAM, ip_protocol);
-    if (sock < 0) {
-        ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
-        while(true);
-    }
-    ESP_LOGI(TAG, "Socket created, sending to %s:%d", HOST_IP_ADDR, PORT);
-
-    char payload[128] = "";
-
-    while (true) {
-        memset(payload, 0, sizeof(payload));
-        sprintf(payload, "%.2f\n", get_theta());
-
-        int err = sendto(sock, payload, strlen(payload), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
-        if (err < 0) {
-            ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
-            break;
-        }
-        //ESP_LOGI(TAG, "Message sent");
-
+//
+//    struct sockaddr_in dest_addr;
+//    dest_addr.sin_addr.s_addr = inet_addr(HOST_IP_ADDR);
+//    dest_addr.sin_family = AF_INET;
+//    dest_addr.sin_port = htons(PORT);
+//    addr_family = AF_INET;
+//    ip_protocol = IPPROTO_IP;
+//
+//    int sock = socket(addr_family, SOCK_DGRAM, ip_protocol);
+//    if (sock < 0) {
+//        ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
+//        while(true);
+//    }
+//    ESP_LOGI(TAG, "Socket created, sending to %s:%d", HOST_IP_ADDR, PORT);
+//
+//    char payload[128] = "";
+//
+//    while (true) {
+////        memset(payload, 0, sizeof(payload));
+////        sprintf(payload, "%.2f\n", get_theta());
+////
+////        int err = sendto(sock, payload, strlen(payload), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+////        if (err < 0) {
+////            ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
+////            break;
+////        }
+//        //ESP_LOGI(TAG, "Message sent");
+//
 //        struct sockaddr_storage source_addr; // Large enough for both IPv4 or IPv6
 //        socklen_t socklen = sizeof(source_addr);
 //        int len = recvfrom(sock, rx_buffer, sizeof(rx_buffer) - 1, 0, (struct sockaddr *)&source_addr, &socklen);
@@ -279,13 +281,108 @@ void vTaskUdpClient(void *)
 //            // Data received
 //        else {
 //            rx_buffer[len] = 0; // Null-terminate whatever we received and treat like a string
-//            ESP_LOGI(TAG, "Received %d bytes from %s:", len, host_ip);
-//            ESP_LOGI(TAG, "%s", rx_buffer);
-//            if (strncmp(rx_buffer, "OK: ", 4) == 0) {
-//                ESP_LOGI(TAG, "Received expected message, reconnecting");
-//                break;
-//            }
+//            Kp1 = strtof(rx_buffer, nullptr);;
+//            memset(rx_buffer, 0, sizeof(rx_buffer));
+//            memset(payload, 0, sizeof(payload));
+//            sprintf(payload, "set Kp = %.2f\n", Kp1);
+//            sendto(sock, payload, strlen(payload), 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
 //        }
-        vTaskDelay(50 / portTICK_PERIOD_MS);
+//        vTaskDelay(50 / portTICK_PERIOD_MS);
+//    }
+
+
+    char rx_buffer[128];
+    char addr_str[128];
+    int addr_family = (int)AF_INET;
+    int ip_protocol = 0;
+    struct sockaddr_in6 dest_addr;
+
+    char payload[128] = "";
+
+    while (1) {
+
+        if (addr_family == AF_INET) {
+            struct sockaddr_in *dest_addr_ip4 = (struct sockaddr_in *)&dest_addr;
+            dest_addr_ip4->sin_addr.s_addr = htonl(INADDR_ANY);
+            dest_addr_ip4->sin_family = AF_INET;
+            dest_addr_ip4->sin_port = htons(PORT);
+            ip_protocol = IPPROTO_IP;
+        } else if (addr_family == AF_INET6) {
+            bzero(&dest_addr.sin6_addr.un, sizeof(dest_addr.sin6_addr.un));
+            dest_addr.sin6_family = AF_INET6;
+            dest_addr.sin6_port = htons(PORT);
+            ip_protocol = IPPROTO_IPV6;
+        }
+
+        int sock = socket(addr_family, SOCK_DGRAM, ip_protocol);
+        if (sock < 0) {
+            ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
+            break;
+        }
+        ESP_LOGI(TAG, "Socket created");
+
+        // Set timeout
+        struct timeval timeout;
+        timeout.tv_sec = 3600;
+        timeout.tv_usec = 0;
+        setsockopt (sock, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof timeout);
+
+        int err = bind(sock, (struct sockaddr *)&dest_addr, sizeof(dest_addr));
+        if (err < 0) {
+            ESP_LOGE(TAG, "Socket unable to bind: errno %d", errno);
+        }
+        ESP_LOGI(TAG, "Socket bound, port %d", PORT);
+
+        struct sockaddr_storage source_addr; // Large enough for both IPv4 or IPv6
+        socklen_t socklen = sizeof(source_addr);
+
+        while (1) {
+            ESP_LOGI(TAG, "Waiting for data");
+            int len = recvfrom(sock, rx_buffer, sizeof(rx_buffer) - 1, 0, (struct sockaddr *)&source_addr, &socklen);
+
+            // Error occurred during receiving
+            if (len < 0) {
+                ESP_LOGE(TAG, "recvfrom failed: errno %d", errno);
+                break;
+            }
+                // Data received
+            else {
+                // Get the sender's ip address as string
+                if (source_addr.ss_family == PF_INET) {
+                    inet_ntoa_r(((struct sockaddr_in *)&source_addr)->sin_addr, addr_str, sizeof(addr_str) - 1);
+#if defined(CONFIG_LWIP_NETBUF_RECVINFO) && !defined(CONFIG_EXAMPLE_IPV6)
+                    for ( cmsgtmp = CMSG_FIRSTHDR(&msg); cmsgtmp != NULL; cmsgtmp = CMSG_NXTHDR(&msg, cmsgtmp) ) {
+                        if ( cmsgtmp->cmsg_level == IPPROTO_IP && cmsgtmp->cmsg_type == IP_PKTINFO ) {
+                            struct in_pktinfo *pktinfo;
+                            pktinfo = (struct in_pktinfo*)CMSG_DATA(cmsgtmp);
+                            ESP_LOGI(TAG, "dest ip: %s\n", inet_ntoa(pktinfo->ipi_addr));
+                        }
+                    }
+#endif
+                } else if (source_addr.ss_family == PF_INET6) {
+                    inet6_ntoa_r(((struct sockaddr_in6 *)&source_addr)->sin6_addr, addr_str, sizeof(addr_str) - 1);
+                }
+
+                rx_buffer[len] = 0; // Null-terminate whatever we received and treat like a string...
+                ESP_LOGI(TAG, "Received %d bytes from %s:", len, addr_str);
+                ESP_LOGI(TAG, "%s", rx_buffer);
+                change_kp1_alternative(rx_buffer);
+                memset(rx_buffer, 0, sizeof(rx_buffer));
+                memset(payload, 0, sizeof(payload));
+                int err = sendto(sock, payload, strlen(payload), 0, (struct sockaddr *)&source_addr, sizeof(source_addr));
+                if (err < 0) {
+                    ESP_LOGE(TAG, "Error occurred during sending: errno %d", errno);
+                    break;
+                }
+            }
+        }
+
+        if (sock != -1) {
+            ESP_LOGE(TAG, "Shutting down socket and restarting...");
+            shutdown(sock, 0);
+            close(sock);
+        }
     }
+    vTaskDelete(NULL);
+
 }
