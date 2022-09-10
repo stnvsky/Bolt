@@ -55,58 +55,67 @@ int change_inertion(int argc, char **argv)
 
 void MotorsDriver::set_speed(int left, int right) {
 
-    int left_speed;
-    int right_speed;
+    const int MAX_SPEED = 100;
+    if(!is_halt)
+    {
+        int left_speed;
+        int right_speed;
 
-    if (left < -60) left = -60;
-    if (left > 60) left = 60;
-    if (right < -60) right = -60;
-    if (right > 60) right = 60;
+        if (left < -MAX_SPEED) left = -MAX_SPEED;
+        if (left > MAX_SPEED) left = MAX_SPEED;
+        if (right < -MAX_SPEED) right = -MAX_SPEED;
+        if (right > MAX_SPEED) right = MAX_SPEED;
 
-    static float L_speed = 0;
-    static float R_speed = 0;
-    static float Tp = MOTORS_SAMPLING_PERIOD; 	/* Okres próbkowania */
-    auto T = (float)InertionTime;		/* Stała czasowa inercji nastawy silnika [ms] */
+        static float L_speed = 0;
+        static float R_speed = 0;
+        static float Tp = MOTORS_SAMPLING_PERIOD; 	/* Okres próbkowania */
+        auto T = (float)InertionTime;		/* Stała czasowa inercji nastawy silnika [ms] */
 
 //    L_speed = (Tp/T) * (static_cast<float>(left) - L_speed) + L_speed;
 //    R_speed = (Tp/T) * (static_cast<float>(right) - R_speed) + R_speed;
 
-    L_speed = static_cast<float>(left);
-    R_speed = static_cast<float>(right);
+        L_speed = static_cast<float>(left);
+        R_speed = static_cast<float>(right);
 
-    if (L_speed < 0)
-    {
-        gpio_set_level(DRV_A1, 1);
-        gpio_set_level(DRV_A2, 0);
-        left_speed = (-static_cast<int32_t>(L_speed) * MAX_DUTY)/ 100;
-    }
-    else
-    {
-        gpio_set_level(DRV_A1, 0);
-        gpio_set_level(DRV_A2, 1);
-        left_speed = static_cast<int32_t>((L_speed) * MAX_DUTY)/ 100;
-    }
+        if (L_speed < 0)
+        {
+            gpio_set_level(DRV_A1, 1);
+            gpio_set_level(DRV_A2, 0);
+            left_speed = (-static_cast<int32_t>(L_speed) * MAX_DUTY)/ 100;
+        }
+        else
+        {
+            gpio_set_level(DRV_A1, 0);
+            gpio_set_level(DRV_A2, 1);
+            left_speed = static_cast<int32_t>((L_speed) * MAX_DUTY)/ 100;
+        }
 
-    ledc_set_duty(this->pwm_channel_A.speed_mode, this->pwm_channel_A.channel, left_speed);
-    ledc_update_duty(this->pwm_channel_A.speed_mode, this->pwm_channel_A.channel);
+        ledc_set_duty(this->pwm_channel_A.speed_mode, this->pwm_channel_A.channel, left_speed);
+        ledc_update_duty(this->pwm_channel_A.speed_mode, this->pwm_channel_A.channel);
 
-    if (R_speed < 0)
-    {
-        gpio_set_level(DRV_B1, 0);
-        gpio_set_level(DRV_B2, 1);
-        right_speed = (-static_cast<int32_t>(R_speed) * MAX_DUTY)/ 100;
-    }
-    else
-    {
-        gpio_set_level(DRV_B1, 1);
-        gpio_set_level(DRV_B2, 0);
-        right_speed = (static_cast<int32_t>(R_speed) * MAX_DUTY)/ 100;
-    }
+        if (R_speed < 0)
+        {
+            gpio_set_level(DRV_B1, 0);
+            gpio_set_level(DRV_B2, 1);
+            right_speed = (-static_cast<int32_t>(R_speed) * MAX_DUTY)/ 100;
+        }
+        else
+        {
+            gpio_set_level(DRV_B1, 1);
+            gpio_set_level(DRV_B2, 0);
+            right_speed = (static_cast<int32_t>(R_speed) * MAX_DUTY)/ 100;
+        }
 
-    ledc_set_duty(this->pwm_channel_B.speed_mode, this->pwm_channel_B.channel, right_speed);
-    ledc_update_duty(this->pwm_channel_B.speed_mode, this->pwm_channel_B.channel);
+        ledc_set_duty(this->pwm_channel_B.speed_mode, this->pwm_channel_B.channel, right_speed);
+        ledc_update_duty(this->pwm_channel_B.speed_mode, this->pwm_channel_B.channel);
+    }
 };
 
-void MotorsDriver::stop() {
+void MotorsDriver::halt() {
     this->set_speed(0,0);
+    is_halt = true;
+};
+
+void MotorsDriver::resume() {
+    is_halt = false;
 };

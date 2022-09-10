@@ -34,10 +34,12 @@ class MotorsDriver {
     public:
         MotorsDriver();
         void set_speed(int left, int right);
-        void stop();
+        void halt();
+        void resume();
     private:
         ledc_channel_config_t pwm_channel_A;
         ledc_channel_config_t pwm_channel_B;
+        bool is_halt = false;
 };
 
 #endif //BOLT_MOTORS_DRIVER_H

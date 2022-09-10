@@ -10,7 +10,7 @@ if (len(sys.argv) != 2):
     print("Pass duration of the test")
     exit(0)
 
-period = 0.05
+period = 0.01
 duration = float(sys.argv[1])
 
 localIP     = "192.168.0.42"
@@ -25,7 +25,10 @@ UDPServerSocket.bind((localIP, localPort))
 start = time()
 while(time() < (start + duration)):
     bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
-    data.append(float(bytesAddressPair[0].decode()))
+    data.append(float(bytesAddressPair[0].decode())*57.3)
+
+print(max(data))
+print(min(data))
 
 # Data for plotting
 t = np.arange(0.0, duration, period)

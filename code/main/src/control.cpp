@@ -2,9 +2,13 @@
 // Created by szymon on 04.09.22.
 //
 
+#include "freertos/FreeRTOS.h"
+#include <freertos/semphr.h>
 #include "control.h"
 #include "motors.h"
 #include "IMU.h"
+
+extern SemaphoreHandle_t control_semaphore;
 
 extern MotorsDriver motors;
 
@@ -30,6 +34,18 @@ static auto prev_e2 = 0.0f;
 int change_kp1_alternative(const char* string)
 {
     Kp1 = strtof(string, nullptr);
+    return 0;
+}
+
+int change_ki1_alternative(const char* string)
+{
+    Ki1 = strtof(string, nullptr);
+    return 0;
+}
+
+int change_kd1_alternative(const char* string)
+{
+    Kd1 = strtof(string, nullptr);
     return 0;
 }
 
@@ -76,9 +92,22 @@ int print_settings(int argc, char **argv)
 
 [[noreturn]] void vTaskControl(void *)
 {
-    while (true) {
-        auto theta = get_theta();
-        auto velocity = static_cast<float>((velocity_left_1e6+velocity_right_1e6))/2000000.0f;
+    while (true)
+    {
+        if( xSemaphoreTake(control_semaphore, ( TickType_t )portMAX_DELAY ) == pdTRUE )
+        {
+            auto theta = get_theta();
+            auto velocity = static_cast<float>((velocity_left_1e6+velocity_right_1e6))/2000000.0f;
+
+            if (abs(theta) > 1)
+            {
+                motors.halt();
+                while (abs(get_theta()) > 0.2)
+                {
+                    vTaskDelay(10 / portTICK_PERIOD_MS);
+                }
+                motors.resume();
+            }
 
 //        auto e1 = theta_set - theta;
 //        auto e2 = velocity_set - velocity;
@@ -92,16 +121,15 @@ int print_settings(int argc, char **argv)
 //        prev_e1 = e1;
 //        prev_e2 = e2;
 
-        auto e1 = theta_set - theta;
-        e1_sum += e1;
+            auto e1 = theta_set - theta;
+            e1_sum += e1;
 
-        auto u = Kp1*e1 + Ki1*h*e1_sum + Kd1*((e1 - prev_e1)/h);
-        prev_e1 = e1;
+            auto u = Kp1*e1 + Ki1*h*e1_sum + Kd1*((e1 - prev_e1)/h);
+            prev_e1 = e1;
 
-        auto speed = static_cast<int32_t>(u);
-        //printf("theta = %.2f, velocity = %.2f, set_speed = %d\n", theta, velocity, speed);
-        motors.set_speed(speed,speed);
-
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+            auto speed = static_cast<int32_t>(u);
+            //printf("%.2f\n", u);
+            motors.set_speed(speed,static_cast<int>(speed*0.93));
+        }
     }
 }

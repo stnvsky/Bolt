@@ -1,12 +1,13 @@
 #include "motors.h"
+#include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
+#include <freertos/semphr.h>
 #include "driver/gpio.h"
 #include "driver/gptimer.h"
 #include <cmath>
-#include <vector>
-
 #include "esp_console.h"
-#include "esp_vfs_dev.h"
+
+SemaphoreHandle_t control_semaphore = nullptr;
 
 MotorsDriver motors;
 
@@ -18,7 +19,7 @@ const auto GPIO_INPUT_PIN_SEL   =    ((1ULL<<GPIO_HALL_SENSOR_1_A) | (1ULL<<GPIO
                                      | (1ULL<<GPIO_HALL_SENSOR_2_A) | (1ULL<<GPIO_HALL_SENSOR_2_B));
 const auto ESP_INTR_FLAG_DEFAULT = 0;
 
-const auto VELOCITY_COUNT_PERIOD = 100; // [ms]
+const auto VELOCITY_COUNT_PERIOD = 20; // [ms]
 const auto VELOCITY_COUNT_FREQUENCY = 1000 / VELOCITY_COUNT_PERIOD; // [hZ]
 
 const auto MOTOR_GEAR = 10; // motor gear n:1
@@ -90,6 +91,8 @@ static void IRAM_ATTR gpio_isr_handler(void* arg)
 
 static bool IRAM_ATTR velocity_callback(gptimer_handle_t, const gptimer_alarm_event_data_t *, void *)
 {
+    static BaseType_t xHigherPriorityTaskWoken;
+
     auto ticks_sum_left = hall_1_a_count + hall_1_b_count;
     velocity_left_1e6 = static_cast<int32_t>(ticks_sum_left * TICKS_TO_METERS_PER_SECOND_1E6);
     if (!direction_forward_left) velocity_left_1e6 = -velocity_left_1e6;
@@ -102,6 +105,11 @@ static bool IRAM_ATTR velocity_callback(gptimer_handle_t, const gptimer_alarm_ev
     hall_1_b_count = 0;
     hall_2_a_count = 0;
     hall_2_b_count = 0;
+
+    xHigherPriorityTaskWoken = pdFALSE;
+
+    xSemaphoreGiveFromISR(control_semaphore, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 
     return false;
 }
@@ -116,6 +124,8 @@ extern int print_settings(int argc, char **argv);
 
 [[noreturn]] void vTaskMotors(void *)
 {
+    vSemaphoreCreateBinary(control_semaphore);
+
     //interrupt of rising edge
     gpio_config_t io_conf = {};
     io_conf.intr_type = GPIO_INTR_POSEDGE;
@@ -139,7 +149,7 @@ extern int print_settings(int argc, char **argv);
     ESP_ERROR_CHECK(gptimer_enable(gptimer));
 
     gptimer_alarm_config_t alarm_config1 = {
-            .alarm_count = VELOCITY_COUNT_PERIOD * 1000, // period = 50ms
+            .alarm_count = VELOCITY_COUNT_PERIOD * 1000, // period = 10ms
             .reload_count = 0,
             .flags{.auto_reload_on_alarm = true}
     };
